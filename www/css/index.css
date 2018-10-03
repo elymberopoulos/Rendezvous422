@@ -131,9 +131,34 @@ a{
 }
 
 #map_canvas { /* Must bigger size than 100x100 pixels */
-    width: 100%;
-    height: 500px;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
   }
+
+.placeSearch{
+    position: absolute;
+    margin: 25% auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 80%;
+    height: 7%;
+    border: 1px solid rgb(104, 104, 104);
+    border-radius: 4px;
+    box-shadow: 0 0 10px black;
+    font-size: 24px;
+    z-index: 10;
+}
+#fafabars{
+    position: absolute;
+    font-size: 36px;
+    padding:10px;
+    color: gray;
+    z-index: 10;
+}
 
 /* Landscape layout (with min-width) */
 @media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {

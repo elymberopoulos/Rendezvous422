@@ -30,7 +30,7 @@ var app = {
         
         var geoOptions = {
           timeout: 10000,
-          enableHighAccuracy: true,
+          enableHighAccuracy: false,
           maximumAge: 10000
         }
         navigator.geolocation.getCurrentPosition(app.geoSuccess, app.geoFail, geoOptions);   
@@ -39,7 +39,6 @@ var app = {
     },
 
     geoSuccess: function(position){
-        alert("success");
         var longitude = position.coords.longitude;
         var latitude = position.coords.latitude;
         var mapOptions = {
@@ -49,20 +48,19 @@ var app = {
         };
         var latLongPosition = new google.maps.LatLng(latitude, longitude, mapOptions);
         var div = document.getElementById("map_canvas");
-        var map = plugin.google.maps.Map.getMap(div);
+        var map = plugin.google.maps.Map.getMap(div,{'controls':{'compass':false}});
         map.animateCamera({
-            target: {lat: latitude, lng: longitude},
+            target: {lat: 41.878113, lng: -87.629799},
             zoom: 17,
             tilt: 60,
-            bearing: 140,
-            duration: 5000
+            duration: 3000
         });
         console.log(longitude + "\n" + latitude);
     },
 
     geoFail: function(error){
-      console.log("the code is " + error.code + ". \n" + "message: " + error.message);
-      alert("ERROR");
+        console.log("the code is " + error.code + ". \n" + "message: " + error.message);
+        
     },
     // Update DOM on a Received Event
     /*receivedEvent: function(id) {
