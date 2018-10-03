@@ -1,0 +1,191 @@
+
+* {
+    -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+}
+
+body {
+    -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
+    -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
+    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+    background-attachment:fixed;
+    font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
+    font-size:12px;
+    height:100%;
+    margin:auto;
+    padding:0px;
+    text-transform:uppercase;
+    width:100%;
+}
+
+.mainScreen{
+    display: block;
+    position: absolute;
+    background-image: linear-gradient(blue,white);
+    height: 100%;
+    width: 100%;
+    text-align: center;
+}
+
+.name{
+    font-size: 48px;
+    font-family: Impact, Charcoal, sans-serif;
+    text-shadow: 2px 2px black;
+    color: white;
+}
+
+.moto{
+    margin-top:-1%
+
+}
+
+/* Portrait layout (default) */
+.title {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20%;
+    text-align:center;
+}
+ .login{
+     position: absolute;
+     left:35%;
+     top: 77%;
+     text-align: center;
+     text-shadow: .5px 0px darkgray;
+    
+ }
+ .loginButton{
+     border-radius: 50%;
+     padding: 4px 16px;
+     background-color: transparent;
+     box-shadow: 0 0 10px black;
+ }
+ 
+ .loginButton:active{
+    box-shadow: 0px 2px black;
+    transform: translateY(3px)
+ }
+
+ .map{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+ }
+
+ .pageHeader{
+    margin: 15% auto;
+    font-size: 35px;
+    color: white;
+    width:100%;
+    text-align: center; 
+ }
+ .profileCreation{
+    display:block;
+    position: absolute;
+    background-image: linear-gradient(blue,white);
+    height: 100%;
+    width: 100%;
+    text-align: center;
+ }
+
+ .creationForm{
+     position: absolute;
+     top: 20%;
+     right: 0;
+     bottom: 0;
+     left: 25%;
+     width: 50%;
+     height: 60%;
+     text-align:center;
+     background-color: #ede8e8;
+     box-shadow: 2px 2px gray;
+     font-size: 18px;
+     border-radius: 5%;
+ }
+input{
+    text-align: center;
+}
+
+.contactButton{
+    margin: 10px auto;
+    font-size: 12px;
+    width: 75%;
+    border-radius: 5%;
+    padding: 4px 10px;
+    background-color: transparent;
+    box-shadow: 0 0 10px black;
+}
+
+.contactButton:active{
+   box-shadow: 0px 2px black;
+   transform: translateY(3px)
+}
+
+a{
+    color: inherit;
+    text-decoration: none;
+}
+
+#map_canvas { /* Must bigger size than 100x100 pixels */
+    width: 100%;
+    height: 500px;
+  }
+
+/* Landscape layout (with min-width) */
+@media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
+    .app {
+        background-position:left center;
+        padding:75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height */
+        margin:-90px 0px 0px -198px;  /* offset vertical: half of image height */
+                                      /* offset horizontal: half of image width and text area width */
+    }
+}
+
+h1 {
+    font-size:24px;
+    font-weight:normal;
+    margin:0px;
+    overflow:visible;
+    padding:0px;
+    text-align:center;
+}
+
+.event {
+    border-radius:4px;
+    -webkit-border-radius:4px;
+    color:#FFFFFF;
+    font-size:12px;
+    margin:0px 30px;
+    padding:2px 0px;
+}
+
+.event.listening {
+    background-color:#333333;
+    display:block;
+}
+
+.event.received {
+    background-color:#4B946A;
+    display:none;
+}
+
+@keyframes fade {
+    from { opacity: 1.0; }
+    50% { opacity: 0.4; }
+    to { opacity: 1.0; }
+}
+ 
+@-webkit-keyframes fade {
+    from { opacity: 1.0; }
+    50% { opacity: 0.4; }
+    to { opacity: 1.0; }
+}
+ 
+.blink {
+    animation:fade 3000ms infinite;
+    -webkit-animation:fade 3000ms infinite;
+}

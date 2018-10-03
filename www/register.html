@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <title>Rendezvous</title>
+    </head>
+    <body>
+        <div class="profileCreation" id="profileCreation"><!--profile creation form -->
+            <h1 class="pageHeader">Account Creation</h1>
+            <div class="creationForm">
+                <form action="/action_page.php">
+                    First name:
+                    <input type="text" name="firstname" placeholder="First">
+                    <br><br>
+                    Last name:
+                    <input type="text" name="lastname" placeholder="Last">
+                    <br><br>
+                    Username:
+                    <input type="text" name="username" placeholder="Username">
+                    <br><br>
+                    Password:
+                    <input type="text" name="password" placeholder="Password">
+                    <br>
+                    <p>
+                        number: 
+                    </p>
+                    <p class="contactButton">Select Emergency Contact</p>
+                    <p class="contactButton">Select Emergency Contact</p>
+
+                    <input type="submit" value="Submit" class="contactButton">
+                </form> 
+            </div>
+        </div>
+    </body>
+</html>
