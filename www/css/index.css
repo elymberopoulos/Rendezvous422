@@ -133,31 +133,44 @@ a{
 #map_canvas { /* Must bigger size than 100x100 pixels */
     position: absolute;
     width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-  }
+    height: 85vh;
+    overflow: hidden; 
+    top:15.5vh;
+}
+
+.mapHeader{
+    position: absolute;
+    width: 100%;
+    height: 15%;
+    background-color: #f4f4f4;
+    box-shadow: 0px 0px 10px black;
+}
 
 .placeSearch{
     position: absolute;
-    margin: 25% auto;
+    display: inline-block;
+    margin: 2% 17%;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
     width: 80%;
-    height: 7%;
-    border: 1px solid rgb(104, 104, 104);
-    border-radius: 4px;
-    box-shadow: 0 0 10px black;
+    height: 20%;
     font-size: 24px;
-    z-index: 10;
 }
+
+.searchInput{
+    width: 80%;
+    height: 120%;
+    margin: 7px auto;
+}
+
 #fafabars{
     position: absolute;
+    display: inline-block;
     font-size: 36px;
     padding:10px;
     color: gray;
-    z-index: 10;
 }
 
 /* Landscape layout (with min-width) */

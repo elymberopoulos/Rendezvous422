@@ -19,7 +19,7 @@
 var app = {
     // Application Constructor
     initialize: function() {
-        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+        document.addEventListener('deviceready', this.onDeviceReady, false);
     },
 
     // deviceready Event Handler
@@ -102,14 +102,6 @@ var app = {
           mapTypeId: google.maps.MapTypeId.ROADMAP,
         };
         var latLongPosition = new google.maps.LatLng(latitude, longitude, mapOptions);
-        var div = document.getElementById("map_canvas");
-        var map = plugin.google.maps.Map.getMap(div,{'controls':{'compass':false}});
-        map.animateCamera({
-            target: {lat: 41.878113, lng: -87.629799},
-            zoom: 17,
-            tilt: 60,
-            duration: 3000
-        });
         console.log(longitude + "\n" + latitude);
     },
 
