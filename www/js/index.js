@@ -36,7 +36,7 @@ var app = {
         navigator.geolocation.getCurrentPosition(app.geoSuccess, app.geoFail, geoOptions);
 
         //INDEXEDDB VARIABLES
-        var dataBase;
+        var db;
         var dataBaseName = "coordinatesDB";
         var dataBaseVersion = 1;
         var indexedDBSupported = false;
@@ -69,7 +69,7 @@ var app = {
             console.dir(event);
           }
         }
-        var dbTransaction = dataBase.transaction("coordinatesDB","readwrite").objectStore("coordinatesDB");
+        var dbTransaction = db.transaction("coordinatesDB","readwrite").objectStore("coordinatesDB");
         var coordinatesDBAccessor = dbTransaction.objectStore("coordinatesDB");
         //INDEXEDDB END=========================================================
 
