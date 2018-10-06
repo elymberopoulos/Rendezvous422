@@ -56,7 +56,7 @@ body {
      top: 77%;
      text-align: center;
      text-shadow: .5px 0px darkgray;
-    
+
  }
  .loginButton{
      border-radius: 50%;
@@ -64,7 +64,7 @@ body {
      background-color: transparent;
      box-shadow: 0 0 10px black;
  }
- 
+
  .loginButton:active{
     box-shadow: 0px 2px black;
     transform: translateY(3px)
@@ -81,7 +81,7 @@ body {
     font-size: 35px;
     color: white;
     width:100%;
-    text-align: center; 
+    text-align: center;
  }
  .profileCreation{
     display:block;
@@ -134,7 +134,7 @@ a{
     position: absolute;
     width: 100vw;
     height: 85vh;
-    overflow: hidden; 
+    overflow: hidden;
     top:15.5vh;
 }
 
@@ -171,6 +171,11 @@ a{
     font-size: 36px;
     padding:10px;
     color: gray;
+}
+#locateSelfButton{
+  width: 15%;
+  height: 100%;
+
 }
 
 /* Landscape layout (with min-width) */
@@ -216,13 +221,13 @@ h1 {
     50% { opacity: 0.4; }
     to { opacity: 1.0; }
 }
- 
+
 @-webkit-keyframes fade {
     from { opacity: 1.0; }
     50% { opacity: 0.4; }
     to { opacity: 1.0; }
 }
- 
+
 .blink {
     animation:fade 3000ms infinite;
     -webkit-animation:fade 3000ms infinite;
