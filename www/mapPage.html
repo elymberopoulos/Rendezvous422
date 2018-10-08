@@ -38,6 +38,18 @@
     </script>
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
+    <script>
+    //DOM EVENT LISTENERS
+    function setUpEvents(){
+      var locateSelfDOM = document.getElementById("locateSelfButton");
+        if(locateSelfDOM){
+        locateSelfDOM.addEventListener("click", getLocation)
+      }else{console.log("locateSelfDOM handler error.");}
+    }
+      window.onLoad = function(){
+        setUpEvents();
+      }
+    </script>
   </body>
 
 </html>

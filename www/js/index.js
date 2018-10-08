@@ -71,8 +71,8 @@ function onLoad() {
 
 
     //EVENT HANDLERS FOR FUNCTIONS
-    getLocation();
-    saveCoordinates();
+    //getLocation();
+    //saveCoordinates();
     //EVENT HANDLERS FOR FUNCTIONS
 
   }, false);
@@ -96,15 +96,15 @@ function onLocateSuccess(latitude, longitude){
   var mapOptions = {
     center: new google.maps.LatLng(0, 0),
     zoom: 1,
-    mapTypeId: google.maps.mapTypeId.ROADMAP
+    mapTypeId: google.maps.MapTypeId.ROADMAP
   };
   var mapWithPosition = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
   var latLong = new google.maps.LatLng(latitude, longitude);
 
-  var marker = new google.maps.marker({
+  var marker = new google.maps.Marker({
     map: mapWithPosition,
     position: latLong,
-    animation: google.maps.animation.DROP
+    animation: google.maps.Animation.DROP
   });
   marker.setMap(mapWithPosition);
   mapWithPosition.setZoom(14);
