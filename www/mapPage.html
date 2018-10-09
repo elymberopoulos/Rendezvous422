@@ -14,7 +14,6 @@
     <div class="mapHeader" id="mapHeader">
       <div class="placeSearch">
         <input type="text" placeholder="Destination" class="searchInput" id="placeSearch">
-        <button type="button" onclick="computeDistanceTime()" id="startTravelButton"></button>
         <input type="text" placeholder="Start Point" class="searchInput" id="startPoint">
         <button type="button" onclick="getLocation()" id="locateSelfButton"></button>
       </div>
@@ -24,40 +23,36 @@
     <div id="map_canvas"></div>
     <script>
       function init() {
-        var locateSelfDOM = document.getElementById("locateSelfButton");
-        locateSelfDOM.addEventListener("click", getLocation);
         var input = document.getElementById('placeSearch');
         var startInput = document.getElementById('startPoint');
         var div = document.getElementById("map_canvas");
         var map = plugin.google.maps.Map.getMap(div,{'controls':{'compass':false}});
-        var autocompleteDestination = new google.maps.places.Autocomplete(input);
-        var autocompleteStart = new google.maps.places.Autocomplete(startInput);
+        var locateSelfDOM = document.getElementById("locateSelfButton");
+        locateSelfDOM.addEventListener("click", getLocation);
 
-        google.maps.event.addListener(autocompleteDestination, 'place_changed', function () {
-          var place = autocompleteDestination.getPlace();
-          var destinationAddress = place.formatted_address;
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        var startAutoComplete = new google.maps.places.Autocomplete(startInput);
+
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+          var place = autocomplete.getPlace();
           var lat = place.geometry.location.lat();
           var long = place.geometry.location.lng();
-          var placeSearchInserter = document.getElementById("placeSearch").innerHTML = destinationAddress;
-          console.log("destination lat: " + lat);
-          console.log("destination long: " + long);
+          console.log("destination latitude:" + lat);
+          console.log("destination longitude:" + long);
         });
-
-        google.maps.event.addListener(autocompleteStart, 'place_changed', function () {
-          var place = autocompleteStart.getPlace();
+        google.maps.event.addListener(startAutoComplete, 'place_changed', function () {
+          var place = startAutoComplete.getPlace();
           var lat = place.geometry.location.lat();
           var long = place.geometry.location.lng();
-          console.log("destination lat: " + lat);
-          console.log("destination long: " + long);
+          console.log("destination latitude:" + lat);
+          console.log("destination longitude:" + long);
         });
       }
-      //document.addEventListener("deviceready",init,false);
-      window.onLoad = function(){
-        init();
-      }
+      document.addEventListener("deviceready",init,false);
     </script>
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
+
   </body>
 
 </html>
