@@ -14,6 +14,7 @@
     <div class="mapHeader" id="mapHeader">
       <div class="placeSearch">
         <input type="text" placeholder="Destination" class="searchInput" id="placeSearch">
+        <button type="button" onclick="computeDistanceTime()" id="startTravelButton"></button>
         <input type="text" placeholder="Start Point" class="searchInput" id="startPoint">
         <button type="button" onclick="getLocation()" id="locateSelfButton"></button>
       </div>
@@ -23,33 +24,40 @@
     <div id="map_canvas"></div>
     <script>
       function init() {
+        var locateSelfDOM = document.getElementById("locateSelfButton");
+        locateSelfDOM.addEventListener("click", getLocation);
         var input = document.getElementById('placeSearch');
+        var startInput = document.getElementById('startPoint');
         var div = document.getElementById("map_canvas");
         var map = plugin.google.maps.Map.getMap(div,{'controls':{'compass':false}});
-        var autocomplete = new google.maps.places.Autocomplete(input);
+        var autocompleteDestination = new google.maps.places.Autocomplete(input);
+        var autocompleteStart = new google.maps.places.Autocomplete(startInput);
 
-        google.maps.event.addListener(autocomplete, 'place_changed', function () {
-          var place = autocomplete.getPlace();
+        google.maps.event.addListener(autocompleteDestination, 'place_changed', function () {
+          var place = autocompleteDestination.getPlace();
+          var destinationAddress = place.formatted_address;
           var lat = place.geometry.location.lat();
-          alert(lat);
+          var long = place.geometry.location.lng();
+          var placeSearchInserter = document.getElementById("placeSearch").innerHTML = destinationAddress;
+          console.log("destination lat: " + lat);
+          console.log("destination long: " + long);
+        });
+
+        google.maps.event.addListener(autocompleteStart, 'place_changed', function () {
+          var place = autocompleteStart.getPlace();
+          var lat = place.geometry.location.lat();
+          var long = place.geometry.location.lng();
+          console.log("destination lat: " + lat);
+          console.log("destination long: " + long);
         });
       }
-      document.addEventListener("deviceready",init,false);
+      //document.addEventListener("deviceready",init,false);
+      window.onLoad = function(){
+        init();
+      }
     </script>
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
-    <script>
-    //DOM EVENT LISTENERS
-    function setUpEvents(){
-      var locateSelfDOM = document.getElementById("locateSelfButton");
-        if(locateSelfDOM){
-        locateSelfDOM.addEventListener("click", getLocation)
-      }else{console.log("locateSelfDOM handler error.");}
-    }
-      window.onLoad = function(){
-        setUpEvents();
-      }
-    </script>
   </body>
 
 </html>

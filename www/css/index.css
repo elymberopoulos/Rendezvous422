@@ -175,7 +175,10 @@ a{
 #locateSelfButton{
   width: 15%;
   height: 100%;
-
+}
+#startTravelButton{
+  width: 15%;
+  height: 100%;
 }
 
 /* Landscape layout (with min-width) */
