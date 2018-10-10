@@ -123,8 +123,9 @@ function setupMap() {//creates default map and adds destination event listener
 
   var input = document.getElementById('placeSearch');
   var autocomplete = new google.maps.places.Autocomplete(input);
-
+  
   google.maps.event.addListener(autocomplete, 'place_changed', function () {
+    mapWithPosition = new google.maps.Map(document.getElementById("map_canvas"), mapOptions)
     var place = autocomplete.getPlace();
     var latitude = place.geometry.location.lat();
     var longitude = place.geometry.location.lng();
@@ -138,6 +139,7 @@ function setupMap() {//creates default map and adds destination event listener
     marker.setMap(mapWithPosition);
     mapWithPosition.setZoom(14);
     mapWithPosition.setCenter(marker.getPosition());
+    
   });
 }
 
