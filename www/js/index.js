@@ -130,7 +130,6 @@ function setupMap() {//creates default map and adds destination event listener
     var longitude = place.geometry.location.lng();
     var latLong = new google.maps.LatLng(latitude, longitude);
     destinationPOS = latLong;
-    marker.setMap(null);
     var marker = new google.maps.Marker({
       map: mapWithPosition,
       position: latLong,
