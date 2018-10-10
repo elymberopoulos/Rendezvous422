@@ -74,6 +74,7 @@ function onLoad() {
     //getLocation();
     //saveCoordinates();
     //EVENT HANDLERS FOR FUNCTIONS
+    setupMap();//map and destination event listener 
 
   }, false);
 
@@ -111,6 +112,36 @@ function onLocateSuccess(latitude, longitude){
   mapWithPosition.setCenter(marker.getPosition());
 
 }
+var destinationPOS;
+function setupMap() {//creates default map and adds destination event listener
+  var mapOptions = {
+    center: new google.maps.LatLng(39.8283, -98.5795),
+    zoom: 3,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  var mapWithPosition = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+  var input = document.getElementById('placeSearch');
+  var autocomplete = new google.maps.places.Autocomplete(input);
+
+  google.maps.event.addListener(autocomplete, 'place_changed', function () {
+    var place = autocomplete.getPlace();
+    var latitude = place.geometry.location.lat();
+    var longitude = place.geometry.location.lng();
+    var latLong = new google.maps.LatLng(latitude, longitude);
+    destinationPOS = latLong;
+    var marker = new google.maps.Marker({
+      map: mapWithPosition,
+      position: latLong,
+      animation: google.maps.Animation.DROP
+    });
+    marker.setMap(mapWithPosition);
+    mapWithPosition.setZoom(14);
+    mapWithPosition.setCenter(marker.getPosition());
+  });
+}
+
+
 
 function saveCoordinates() {
   //use navigator to get latitude and longitude and store
