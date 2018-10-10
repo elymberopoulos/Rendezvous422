@@ -16,6 +16,15 @@
         <input type="text" placeholder="Destination" class="searchInput" id="placeSearch">
         <input type="text" placeholder="Start Point" class="searchInput" id="startPoint">
         <button type="button" onclick="getLocation()" id="locateSelfButton"></button>
+
+        <!-- assign values to these hidden inputs to retrieve later -->
+        <input id="distanceMatrixStartLatitude" type="hidden" name="distanceMatrixStartLatitude" required>
+        <input id="distanceMatrixStartLongitude" type="hidden" name="distanceMatrixStartLongitude" required>
+        <input id="distanceMatrixDestinationLatitude" type="hidden" name="distanceMatrixDestinationLatitude" required>
+        <input id="distanceMatrixDestinationLongitude" type="hidden" name="distanceMatrixDestinationLongitude" required>
+        <!-- ============================================================================================================= -->
+
+
       </div>
       <div class="fa fa-bars" id="fafabars"></div>
     </div>
@@ -47,6 +56,16 @@
           console.log("destination latitude:" + lat);
           console.log("destination longitude:" + long);
         });
+      }
+      function computeDistanceTime(){
+        var startLat = document.getElementById("distanceMatrixStartLatitude").value;
+        var startLng = document.getElementById("distanceMatrixStartLongitude").value;
+        var destinationLat = document.getElementById("distanceMatrixDestinationLatitude").value;
+        var destinationLng = document.getElementById("distanceMatrixDestinationLongitude").value;
+        if(startLat || startLng || destinationLat || destinationLng === null){
+          alert("Please enter values for all required fields.");
+        }
+
       }
       document.addEventListener("deviceready",init,false);
     </script>
