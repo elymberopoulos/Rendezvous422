@@ -74,7 +74,7 @@ function onLoad() {
     //getLocation();
     //saveCoordinates();
     //EVENT HANDLERS FOR FUNCTIONS
-    setupMap();
+    setupMap();//map and destination event listener 
 
   }, false);
 
@@ -112,8 +112,8 @@ function onLocateSuccess(latitude, longitude){
   mapWithPosition.setCenter(marker.getPosition());
 
 }
-
-function setupMap() {
+var destinationPOS;
+function setupMap() {//creates default map and adds destination event listener
   var mapOptions = {
     center: new google.maps.LatLng(39.8283, -98.5795),
     zoom: 3,
@@ -129,7 +129,8 @@ function setupMap() {
     var latitude = place.geometry.location.lat();
     var longitude = place.geometry.location.lng();
     var latLong = new google.maps.LatLng(latitude, longitude);
-
+    destinationPOS = latLong;
+    marker.setMap(null);
     var marker = new google.maps.Marker({
       map: mapWithPosition,
       position: latLong,
