@@ -50,10 +50,8 @@
         locateSelfDOM.addEventListener("click", getLocation);
         var travelTimeButton = document.getElementById("startTravelButton")
         travelTimeButton.addEventListener("click", computeDistanceTime);
-
         var autocomplete = new google.maps.places.Autocomplete(input);
         var startAutoComplete = new google.maps.places.Autocomplete(startInput);
-
         google.maps.event.addListener(autocomplete, 'place_changed', function() {
           var place = autocomplete.getPlace();
           var lat = place.geometry.location.lat();
@@ -73,7 +71,6 @@
           console.log("Starting longitude:" + lng);
         });
       }
-
       function computeDistanceTime() {
         var startLat = document.getElementById("distanceMatrixStartLatitude").value;
         var startLng = document.getElementById("distanceMatrixStartLongitude").value;
