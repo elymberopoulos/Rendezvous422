@@ -1,5 +1,5 @@
 
-
+function initMapPage() {
   var input = document.getElementById('placeSearch');
   var startInput = document.getElementById('startPoint');
   var div = document.getElementById("map_canvas");
@@ -83,4 +83,4 @@ function matrixCallback(response, status) {
     */
   }
 }
-initMapPage();
+}
