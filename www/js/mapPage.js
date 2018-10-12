@@ -35,6 +35,40 @@ function initMapPage() {
     console.log("Starting longitude:" + lng);
   });
 
+  function getLocation(){
+    var latitude;
+    var longitude;
+    navigator.geolocation.getCurrentPosition(function(position){
+      latitude = position.coords.latitude;
+      longitude = position.coords.longitude;
+      console.log("latitude is:" + latitude);
+      console.log("longitude is" + longitude);
+      onLocateSuccess(latitude, longitude);
+    }), (function(error){
+      console.log("error message: " + error.message + "\n" + "error code: " + error.code);
+    }),
+    {enableHighAccuracy: true}
+  }
+  function onLocateSuccess(latitude, longitude){
+    var mapOptions = {
+      center: new google.maps.LatLng(0, 0),
+      zoom: 1,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var mapWithPosition = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+    var latLong = new google.maps.LatLng(latitude, longitude);
+
+    var marker = new google.maps.Marker({
+      map: mapWithPosition,
+      position: latLong,
+      animation: google.maps.Animation.DROP
+    });
+    marker.setMap(mapWithPosition);
+    mapWithPosition.setZoom(14);
+    mapWithPosition.setCenter(marker.getPosition());
+
+  }
+
 function computeDistanceTime() {
   var startLat = document.getElementById("distanceMatrixStartLatitude").value;
   var startLng = document.getElementById("distanceMatrixStartLongitude").value;
