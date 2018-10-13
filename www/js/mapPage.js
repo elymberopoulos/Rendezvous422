@@ -83,7 +83,6 @@ function computeDistanceTime() {
   distanceService.getDistanceMatrix({
     origins: [originValues],
     destinations: [destinationValues],
-    key: "AIzaSyCZFJ0XF038fSgyskJBsdNdpFj8ZC7tEOw",
     travelMode: google.maps.TravelMode.DRIVING,
     unitSystem: google.maps.UnitSystem.IMPERIAL,
     avoidHighways: false,
@@ -97,6 +96,13 @@ function matrixCallback(response, status) {
   } else {
     var origins = response.orignAddress;
     var destinations = response.destinationAddresses;
+    const distanceObj = response.rows[0]['elements'][0]['distance'];
+    const durationObj = response.rows[0]['elements'][0]['duration'];
+    // log test objects to console
+    console.log('reponse = ', response);
+    console.log(distanceObj);
+    console.log(durationObj);
+    /*
     for (var i = 0; i < origins.length; i++) {
       var results = response.rows[i].elements;
       for (var j = 0; j < results.length; j++) {
@@ -105,7 +111,7 @@ function matrixCallback(response, status) {
         var duration = element.duration.text;
         console.log("Duration: " + duration);
       }
-    }
+    }*/
     /*
     var overallTravelTime = response.rows[0].elements[0].duration;
     var travelTimeSeconds = overallTravelTime % 60;
