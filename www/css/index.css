@@ -179,9 +179,14 @@ a{
   height: 100%;
 }
 
+#startTravelButton{
+  width: 15%;
+  height: 100%;
+
 .noScroll{
     overflow: hidden;
     position: fixed;
+
 }
 
 /* Landscape layout (with min-width) */
