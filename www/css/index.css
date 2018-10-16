@@ -3,7 +3,7 @@
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
 }
 
-body {
+.body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
     -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
     -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
@@ -92,6 +92,15 @@ body {
     text-align: center;
  }
 
+ .routeCreation{
+    display:block;
+    position: absolute;
+    background-image: linear-gradient(blue,white);
+    height: 100%;
+    width: 100%;
+    text-align: center;
+ }
+
  .creationForm{
      position: absolute;
      top: 20%;
@@ -106,6 +115,20 @@ body {
      font-size: 18px;
      border-radius: 5%;
  }
+ .routeForm{
+    position: absolute;
+    top: 20%;
+    right: 0;
+    bottom: 0;
+    left: 25%;
+    width: 50%;
+    height: 60%;
+    text-align:center;
+    background-color: #ede8e8;
+    box-shadow: 2px 2px gray;
+    font-size: 18px;
+    border-radius: 5%;
+}
 input{
     text-align: center;
 }
