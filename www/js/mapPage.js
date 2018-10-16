@@ -24,6 +24,8 @@ function initMapPage() {
   var startAutoComplete = new google.maps.places.Autocomplete(startInput);
 
   google.maps.event.addListener(autocomplete, 'place_changed', function() {
+    directionsDisplay.setMap(null);//clear route line
+
     var place = autocomplete.getPlace();
     var lat = place.geometry.location.lat();
     var lng = place.geometry.location.lng();
@@ -37,6 +39,8 @@ function initMapPage() {
     console.log("destination longitude:" + lng);
   });
   google.maps.event.addListener(startAutoComplete, 'place_changed', function() {
+    directionsDisplay.setMap(null);//clear route line
+
     var place = startAutoComplete.getPlace();
     var lat = place.geometry.location.lat();
     var lng = place.geometry.location.lng();
@@ -53,6 +57,7 @@ function initMapPage() {
   function getLocation(){
     var latitude;
     var longitude;
+
     navigator.geolocation.getCurrentPosition(function(position){
       latitude = position.coords.latitude;
       longitude = position.coords.longitude;
@@ -97,6 +102,7 @@ function initMapPage() {
   }
 
 function computeDistanceTime() {
+  directionsDisplay.setMap(mapWithPosition);
   calcRoute();
   var startLat = document.getElementById("distanceMatrixStartLatitude").value;
   var startLng = document.getElementById("distanceMatrixStartLongitude").value;
