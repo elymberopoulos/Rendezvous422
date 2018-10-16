@@ -9,7 +9,7 @@ function initMapPage() {
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
   var mapWithPosition = new google.maps.Map(div, mapOptions);
-
+  var locationArray = []; //first is destination, second is start
   
   
   var locateSelfDOM = document.getElementById("locateSelfButton");
@@ -27,15 +27,9 @@ function initMapPage() {
     document.getElementById("distanceMatrixDestinationLatitude").value = lat;
     document.getElementById("distanceMatrixDestinationLongitude").value = lng;
     var latLong = new google.maps.LatLng(lat, lng);
-    var marker = new google.maps.Marker({
-      map: mapWithPosition,
-      position: latLong,
-      animation: google.maps.Animation.DROP
-    });
-    marker.setMap(mapWithPosition);
-    mapWithPosition.setZoom(14);
-    mapWithPosition.setCenter(marker.getPosition());
-    
+    locationArray[0] = latLong;
+    placeMarkers(locationArray);
+
     console.log("destination latitude:" + lat);
     console.log("destination longitude:" + lng);
   });
@@ -46,14 +40,9 @@ function initMapPage() {
     document.getElementById("distanceMatrixStartLatitude").value = lat;
     document.getElementById("distanceMatrixStartLongitude").value = lng;
     var latLong = new google.maps.LatLng(lat, lng);
-    var marker = new google.maps.Marker({
-      map: mapWithPosition,
-      position: latLong,
-      animation: google.maps.Animation.DROP
-    });
-    marker.setMap(mapWithPosition);
-    mapWithPosition.setZoom(14);
-    mapWithPosition.setCenter(marker.getPosition());
+    locationArray[1] = latLong;
+    placeMarkers(locationArray);
+
     console.log("Starting latitude:" + lat);
     console.log("Starting longitude:" + lng);
   });
@@ -75,20 +64,29 @@ function initMapPage() {
   function onLocateSuccess(latitude, longitude){
     startInput.value = "Current Location";
     var latLong = new google.maps.LatLng(latitude, longitude);
-
-    var marker = new google.maps.Marker({
-      map: mapWithPosition,
-      position: latLong,
-      animation: google.maps.Animation.DROP
-    });
-    marker.setMap(mapWithPosition);
-    mapWithPosition.setZoom(14);
-    mapWithPosition.setCenter(marker.getPosition());
-    
+    locationArray[1] = latLong;
+    placeMarkers(locationArray);
     document.getElementById("distanceMatrixStartLatitude").value = latitude;
     document.getElementById("distanceMatrixStartLongitude").value = longitude;
     console.log("Starting latitude:" + latitude);
     console.log("Starting longitude:" + longitude);
+  }
+  var markerArray = []
+  function placeMarkers(markers){
+    for (var i = 0; i < markerArray.length; i++ ) {
+      markerArray[i].setMap(null);
+    }
+    markers.forEach(function(element) {
+      var marker = new google.maps.Marker({
+        map: mapWithPosition,
+        position: element,
+        animation: google.maps.Animation.DROP
+      });
+      markerArray.push(marker);
+      marker.setMap(mapWithPosition);
+      mapWithPosition.setZoom(14);
+      mapWithPosition.setCenter(marker.getPosition());
+    });
   }
 
 function computeDistanceTime() {
