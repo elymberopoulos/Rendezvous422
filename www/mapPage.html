@@ -9,17 +9,17 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!--hamburger menu-->
   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADrTPp87D6OAgTTLy2SZ8UdWukxXdKFnA"></script>
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmJItgwBLqDMRQ7xN8a1NUxGNVzqTR3E0&libraries=places"></script>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADrTPp87D6OAgTTLy2SZ8UdWukxXdKFnA&libraries=places"></script>
   <title>Map</title>
 </head>
 
-<body>
+<body class="noScroll">
   <div class="mapHeader" id="mapHeader">
     <div class="placeSearch">
       <input type="text" placeholder="Destination" class="searchInput" id="placeSearch">
-      <button type="button" onclick="computeDistanceTime()" id="startTravelButton"></button>
+      <button type="button" id="startTravelButton">start</button>
       <input type="text" placeholder="Start Point" class="searchInput" id="startPoint">
-      <button type="button" onclick="getLocation()" id="locateSelfButton"></button>
+      <button type="button" id="locateSelfButton">loc</button>
 
       <!-- assign values to these hidden inputs to retrieve later -->
       <div id="matrixCoordinates" style="display:none;">
@@ -37,7 +37,7 @@
     <div id="map_canvas"></div>
 
     <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="js/index.js"></script>
+    <!--<script type="text/javascript" src="js/index.js"></script> -->
     <script type="text/javascript" src="js/mapPage.js"></script>
     <script>
       document.addEventListener("deviceready", initMapPage, false);

@@ -2,12 +2,19 @@
 function initMapPage() {
   var input = document.getElementById('placeSearch');
   var startInput = document.getElementById('startPoint');
+  var directionsService = new google.maps.DirectionsService();
+  var directionsDisplay = new google.maps.DirectionsRenderer();
   var div = document.getElementById("map_canvas");
-  var map = plugin.google.maps.Map.getMap(div, {
-    'controls': {
-      'compass': false
-    }
-  });
+  var mapOptions = {
+    center: new google.maps.LatLng(39.8283, -98.5795),
+    zoom: 3,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  var mapWithPosition = new google.maps.Map(div, mapOptions);
+  directionsDisplay.setMap(mapWithPosition);
+  var locationArray = []; //first is destination, second is start
+  
+  
   var locateSelfDOM = document.getElementById("locateSelfButton");
   locateSelfDOM.addEventListener("click", getLocation);
   var travelTimeButton = document.getElementById("startTravelButton")
@@ -17,20 +24,32 @@ function initMapPage() {
   var startAutoComplete = new google.maps.places.Autocomplete(startInput);
 
   google.maps.event.addListener(autocomplete, 'place_changed', function() {
+    directionsDisplay.setMap(null);//clear route line
+
     var place = autocomplete.getPlace();
     var lat = place.geometry.location.lat();
     var lng = place.geometry.location.lng();
     document.getElementById("distanceMatrixDestinationLatitude").value = lat;
     document.getElementById("distanceMatrixDestinationLongitude").value = lng;
+    var latLong = new google.maps.LatLng(lat, lng);
+    locationArray[0] = latLong;
+    placeMarkers(locationArray);
+
     console.log("destination latitude:" + lat);
     console.log("destination longitude:" + lng);
   });
   google.maps.event.addListener(startAutoComplete, 'place_changed', function() {
+    directionsDisplay.setMap(null);//clear route line
+
     var place = startAutoComplete.getPlace();
     var lat = place.geometry.location.lat();
     var lng = place.geometry.location.lng();
     document.getElementById("distanceMatrixStartLatitude").value = lat;
     document.getElementById("distanceMatrixStartLongitude").value = lng;
+    var latLong = new google.maps.LatLng(lat, lng);
+    locationArray[1] = latLong;
+    placeMarkers(locationArray);
+
     console.log("Starting latitude:" + lat);
     console.log("Starting longitude:" + lng);
   });
@@ -38,6 +57,7 @@ function initMapPage() {
   function getLocation(){
     var latitude;
     var longitude;
+
     navigator.geolocation.getCurrentPosition(function(position){
       latitude = position.coords.latitude;
       longitude = position.coords.longitude;
@@ -50,26 +70,41 @@ function initMapPage() {
     {enableHighAccuracy: true}
   }
   function onLocateSuccess(latitude, longitude){
-    var mapOptions = {
-      center: new google.maps.LatLng(0, 0),
-      zoom: 1,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    var mapWithPosition = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+    directionsDisplay.setMap(null);
+    startInput.value = "Current Location";
     var latLong = new google.maps.LatLng(latitude, longitude);
+    locationArray[1] = latLong;
+    placeMarkers(locationArray);
+    document.getElementById("distanceMatrixStartLatitude").value = latitude;
+    document.getElementById("distanceMatrixStartLongitude").value = longitude;
+    console.log("Starting latitude:" + latitude);
+    console.log("Starting longitude:" + longitude);
+  }
+  var markerArray = []
 
-    var marker = new google.maps.Marker({
-      map: mapWithPosition,
-      position: latLong,
-      animation: google.maps.Animation.DROP
+  function clearMarkers(){
+    for (var i = 0; i < markerArray.length; i++ ) {
+      markerArray[i].setMap(null);
+    }
+  }
+  function placeMarkers(markers){
+    clearMarkers();
+    markers.forEach(function(element) {
+      var marker = new google.maps.Marker({
+        map: mapWithPosition,
+        position: element,
+        animation: google.maps.Animation.DROP
+      });
+      markerArray.push(marker);
+      marker.setMap(mapWithPosition);
+      mapWithPosition.setZoom(14);
+      mapWithPosition.setCenter(marker.getPosition());
     });
-    marker.setMap(mapWithPosition);
-    mapWithPosition.setZoom(14);
-    mapWithPosition.setCenter(marker.getPosition());
-
   }
 
 function computeDistanceTime() {
+  directionsDisplay.setMap(mapWithPosition);
+  calcRoute();
   var startLat = document.getElementById("distanceMatrixStartLatitude").value;
   var startLng = document.getElementById("distanceMatrixStartLongitude").value;
   var destinationLat = document.getElementById("distanceMatrixDestinationLatitude").value;
@@ -88,6 +123,23 @@ function computeDistanceTime() {
     avoidHighways: false,
     avoidTolls: false
   }, matrixCallback);
+}
+
+function calcRoute(){
+  clearMarkers();
+  var request = {
+    origin: locationArray[1],
+    destination: locationArray[0],
+    // Note that Javascript allows us to access the constant
+    // using square brackets and a string value as its
+    // "property."
+    travelMode: google.maps.TravelMode["WALKING"]
+};
+directionsService.route(request, function(response, status) {
+  if (status == 'OK') {
+    directionsDisplay.setDirections(response);
+  }
+});
 }
 
 function matrixCallback(response, status) {
