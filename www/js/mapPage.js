@@ -6,8 +6,8 @@ function initMapPage() {
   var directionsDisplay = new google.maps.DirectionsRenderer();
   var div = document.getElementById("map_canvas");
   var mapOptions = {
-    center: new google.maps.LatLng(0, 0),
-    zoom: 1,
+    center: new google.maps.LatLng(39.8283, -98.5795),
+    zoom: 3,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
   var mapWithPosition = new google.maps.Map(div, mapOptions);
