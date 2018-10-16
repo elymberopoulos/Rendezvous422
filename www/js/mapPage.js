@@ -70,6 +70,7 @@ function initMapPage() {
     {enableHighAccuracy: true}
   }
   function onLocateSuccess(latitude, longitude){
+    directionsDisplay.setMap(null);
     startInput.value = "Current Location";
     var latLong = new google.maps.LatLng(latitude, longitude);
     locationArray[1] = latLong;
