@@ -2,6 +2,8 @@
 function initMapPage() {
   var input = document.getElementById('placeSearch');
   var startInput = document.getElementById('startPoint');
+  var directionsService = new google.maps.DirectionsService();
+  var directionsDisplay = new google.maps.DirectionsRenderer();
   var div = document.getElementById("map_canvas");
   var mapOptions = {
     center: new google.maps.LatLng(0, 0),
@@ -9,6 +11,7 @@ function initMapPage() {
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
   var mapWithPosition = new google.maps.Map(div, mapOptions);
+  directionsDisplay.setMap(mapWithPosition);
   var locationArray = []; //first is destination, second is start
   
   
@@ -72,10 +75,14 @@ function initMapPage() {
     console.log("Starting longitude:" + longitude);
   }
   var markerArray = []
-  function placeMarkers(markers){
+
+  function clearMarkers(){
     for (var i = 0; i < markerArray.length; i++ ) {
       markerArray[i].setMap(null);
     }
+  }
+  function placeMarkers(markers){
+    clearMarkers();
     markers.forEach(function(element) {
       var marker = new google.maps.Marker({
         map: mapWithPosition,
@@ -90,6 +97,7 @@ function initMapPage() {
   }
 
 function computeDistanceTime() {
+  calcRoute();
   var startLat = document.getElementById("distanceMatrixStartLatitude").value;
   var startLng = document.getElementById("distanceMatrixStartLongitude").value;
   var destinationLat = document.getElementById("distanceMatrixDestinationLatitude").value;
@@ -108,6 +116,23 @@ function computeDistanceTime() {
     avoidHighways: false,
     avoidTolls: false
   }, matrixCallback);
+}
+
+function calcRoute(){
+  clearMarkers();
+  var request = {
+    origin: locationArray[1],
+    destination: locationArray[0],
+    // Note that Javascript allows us to access the constant
+    // using square brackets and a string value as its
+    // "property."
+    travelMode: google.maps.TravelMode["WALKING"]
+};
+directionsService.route(request, function(response, status) {
+  if (status == 'OK') {
+    directionsDisplay.setDirections(response);
+  }
+});
 }
 
 function matrixCallback(response, status) {
