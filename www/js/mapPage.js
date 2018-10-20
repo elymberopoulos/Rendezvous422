@@ -13,8 +13,8 @@ function initMapPage() {
   var mapWithPosition = new google.maps.Map(div, mapOptions);
   directionsDisplay.setMap(mapWithPosition);
   var locationArray = []; //first is destination, second is start
-  
-  
+
+
   var locateSelfDOM = document.getElementById("locateSelfButton");
   locateSelfDOM.addEventListener("click", getLocation);
   var travelTimeButton = document.getElementById("startTravelButton")
@@ -61,8 +61,6 @@ function initMapPage() {
     navigator.geolocation.getCurrentPosition(function(position){
       latitude = position.coords.latitude;
       longitude = position.coords.longitude;
-      console.log("latitude is:" + latitude);
-      console.log("longitude is" + longitude);
       onLocateSuccess(latitude, longitude);
     }), (function(error){
       console.log("error message: " + error.message + "\n" + "error code: " + error.code);
@@ -79,6 +77,7 @@ function initMapPage() {
     document.getElementById("distanceMatrixStartLongitude").value = longitude;
     console.log("Starting latitude:" + latitude);
     console.log("Starting longitude:" + longitude);
+    watchPosition();
   }
   var markerArray = []
 
@@ -154,25 +153,21 @@ function matrixCallback(response, status) {
     console.log('reponse = ', response);
     console.log(distanceObj);
     console.log(durationObj);
-    /*
-    for (var i = 0; i < origins.length; i++) {
-      var results = response.rows[i].elements;
-      for (var j = 0; j < results.length; j++) {
-        var element = results[j];
-        var distance = element.distance.text;
-        var duration = element.duration.text;
-        console.log("Duration: " + duration);
-      }
-    }*/
-    /*
-    var overallTravelTime = response.rows[0].elements[0].duration;
-    var travelTimeSeconds = overallTravelTime % 60;
-    var travelTimeMinutes = Math.floor(overallTravelTime / 60);
-    var travelTimeHours = Math.floor(overallTravelTime / travelTimeMinutes);
-    console.log("Hours :" + travelTimeHours);
-    console.log("Minutes :" + travelTimeMinutes);
-    console.log("Seconds: " + travelTimeSeconds);
-    */
   }
 }
+  function watchPosition(){
+    var options = {
+      enableHighAccuracy: true,
+      maximumAge: 3500,
+      timeout: 5000
+    };
+    var watchID = navigator.geolocation.watchPosition(function(position){
+      var watchedLatitude = position.coords.latitude;
+      var watchedLongitude = position.coords.longitude;
+      console.log("watchedLatitude is: " + watchedLatitude);
+      console.log("watchedLongitude is: " + watchedLongitude);
+    },(function(error){
+      console.log("error message: " + error.message + "\n" + "error code: " + error.code);
+    }), options);
+  }
 }
