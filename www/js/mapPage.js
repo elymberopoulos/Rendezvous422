@@ -1,7 +1,10 @@
 
 function initMapPage() {
+  getLocation();
+  
   var input = document.getElementById('placeSearch');
-  var startInput = document.getElementById('startPoint');
+  var bounds = new google.maps.LatLngBounds();//allows zooming of map to fit markers 
+
   var directionsService = new google.maps.DirectionsService();
   var directionsDisplay = new google.maps.DirectionsRenderer();
   var div = document.getElementById("map_canvas");
@@ -13,15 +16,12 @@ function initMapPage() {
   var mapWithPosition = new google.maps.Map(div, mapOptions);
   directionsDisplay.setMap(mapWithPosition);
   var locationArray = []; //first is destination, second is start
-
-
   var locateSelfDOM = document.getElementById("locateSelfButton");
   locateSelfDOM.addEventListener("click", getLocation);
   var travelTimeButton = document.getElementById("startTravelButton")
   travelTimeButton.addEventListener("click", computeDistanceTime);
 
   var autocomplete = new google.maps.places.Autocomplete(input);
-  var startAutoComplete = new google.maps.places.Autocomplete(startInput);
 
   google.maps.event.addListener(autocomplete, 'place_changed', function() {
     directionsDisplay.setMap(null);//clear route line
@@ -34,25 +34,13 @@ function initMapPage() {
     var latLong = new google.maps.LatLng(lat, lng);
     locationArray[0] = latLong;
     placeMarkers(locationArray);
-
+    document.getElementById("startTravelButton").style.display = "block";
+    document.getElementById("map_canvas").style.height = "78vmax";
     console.log("destination latitude:" + lat);
     console.log("destination longitude:" + lng);
+    mapWithPosition.fitBounds(bounds);//fit markers
   });
-  google.maps.event.addListener(startAutoComplete, 'place_changed', function() {
-    directionsDisplay.setMap(null);//clear route line
 
-    var place = startAutoComplete.getPlace();
-    var lat = place.geometry.location.lat();
-    var lng = place.geometry.location.lng();
-    document.getElementById("distanceMatrixStartLatitude").value = lat;
-    document.getElementById("distanceMatrixStartLongitude").value = lng;
-    var latLong = new google.maps.LatLng(lat, lng);
-    locationArray[1] = latLong;
-    placeMarkers(locationArray);
-
-    console.log("Starting latitude:" + lat);
-    console.log("Starting longitude:" + lng);
-  });
 
   function getLocation(){
     var latitude;
@@ -62,14 +50,15 @@ function initMapPage() {
       latitude = position.coords.latitude;
       longitude = position.coords.longitude;
       onLocateSuccess(latitude, longitude);
-    }), (function(error){
+    }, function(error){
       console.log("error message: " + error.message + "\n" + "error code: " + error.code);
-    }),
-    {enableHighAccuracy: true}
+      alert("Could not find location");
+    },
+    {enableHighAccuracy: true, timeout: 8000});
   }
   function onLocateSuccess(latitude, longitude){
+    document.getElementById("waitForLocation").style.display = "none";
     directionsDisplay.setMap(null);
-    startInput.value = "Current Location";
     var latLong = new google.maps.LatLng(latitude, longitude);
     locationArray[1] = latLong;
     placeMarkers(locationArray);
@@ -98,7 +87,8 @@ function initMapPage() {
       marker.setMap(mapWithPosition);
       mapWithPosition.setZoom(14);
       mapWithPosition.setCenter(marker.getPosition());
-    });
+      bounds.extend(marker.getPosition());//extend bounds for map to fit markers
+    });     
   }
 
 function computeDistanceTime() {
@@ -117,7 +107,7 @@ function computeDistanceTime() {
   distanceService.getDistanceMatrix({
     origins: [originValues],
     destinations: [destinationValues],
-    travelMode: google.maps.TravelMode.DRIVING,
+    travelMode: google.maps.TravelMode.WALKING,
     unitSystem: google.maps.UnitSystem.IMPERIAL,
     avoidHighways: false,
     avoidTolls: false
