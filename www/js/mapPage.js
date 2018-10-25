@@ -187,4 +187,22 @@ function matrixCallback(response, status) {
       calcRoute();
     }
   }
+  function findContact(){
+    var searchInput = document.getElementById(CONTACTSINPUTFIELD).value;
+    var options = new ContactFindOptions();
+    options.filter = searchInput;
+    options.multiple = true;
+    options.desiredFields = [navigator.contacts.fieldType.name, navigator.contacts.fieldType.phoneNumbers];
+    options.hasPhoneNumber = true;
+    var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name,
+      navigator.contacts.fieldType.phoneNumbers];
+    navigator.contacts.find(fields, contactSuccess, contactError, options);
+    navigator.contacts.find
+  }
+  function contactSuccess(contacts){
+    alert('Found ' + contacts.length + ' contacts.');
+  }
+  function contactError(error){
+    console.log("Cannot find contacts because of error: " + error);
+  }
 }
