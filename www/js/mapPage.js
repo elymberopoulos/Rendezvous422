@@ -1,27 +1,36 @@
 
 function initMapPage() {
   getLocation();
-  
-  var input = document.getElementById('placeSearch');
-  var bounds = new google.maps.LatLngBounds();//allows zooming of map to fit markers 
-
-  var directionsService = new google.maps.DirectionsService();
-  var directionsDisplay = new google.maps.DirectionsRenderer();
   var div = document.getElementById("map_canvas");
   var mapOptions = {
     center: new google.maps.LatLng(39.8283, -98.5795),
     zoom: 3,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
+  var locationArray = []; //first is destination, second is start
+  var transitType = google.maps.TravelMode.WALKING;
+  
+  //API declarations 
+  var input = document.getElementById('placeSearch');
+  var autocomplete = new google.maps.places.Autocomplete(input);
+  var bounds = new google.maps.LatLngBounds();//allows zooming of map to fit markers 
+  var directionsService = new google.maps.DirectionsService();
+  var directionsDisplay = new google.maps.DirectionsRenderer();
   var mapWithPosition = new google.maps.Map(div, mapOptions);
   directionsDisplay.setMap(mapWithPosition);
-  var locationArray = []; //first is destination, second is start
+
+  //EVENT LISTENERS 
+  var walk = document.getElementById("walk");
+  var drive = document.getElementById("drive");
+  var transit = document.getElementById("transit");
+  walk.addEventListener("click",setTravelMode);
+  drive.addEventListener("click",setTravelMode);
+  transit.addEventListener("click",setTravelMode);
   var locateSelfDOM = document.getElementById("locateSelfButton");
   locateSelfDOM.addEventListener("click", getLocation);
   var travelTimeButton = document.getElementById("startTravelButton")
   travelTimeButton.addEventListener("click", computeDistanceTime);
 
-  var autocomplete = new google.maps.places.Autocomplete(input);
 
   google.maps.event.addListener(autocomplete, 'place_changed', function() {
     directionsDisplay.setMap(null);//clear route line
@@ -52,7 +61,8 @@ function initMapPage() {
       onLocateSuccess(latitude, longitude);
     }, function(error){
       console.log("error message: " + error.message + "\n" + "error code: " + error.code);
-      alert("Could not find location");
+      alert("Could not find location, Turn on location and try again");
+      document.location.href = 'index.html';
     },
     {enableHighAccuracy: true, timeout: 8000});
   }
@@ -93,7 +103,7 @@ function initMapPage() {
 
 function computeDistanceTime() {
   directionsDisplay.setMap(mapWithPosition);
-  calcRoute();
+  calcRoute(false);
   var startLat = document.getElementById("distanceMatrixStartLatitude").value;
   var startLng = document.getElementById("distanceMatrixStartLongitude").value;
   var destinationLat = document.getElementById("distanceMatrixDestinationLatitude").value;
@@ -107,7 +117,7 @@ function computeDistanceTime() {
   distanceService.getDistanceMatrix({
     origins: [originValues],
     destinations: [destinationValues],
-    travelMode: google.maps.TravelMode.WALKING,
+    travelMode: transitType,
     unitSystem: google.maps.UnitSystem.IMPERIAL,
     avoidHighways: false,
     avoidTolls: false
@@ -119,16 +129,13 @@ function calcRoute(){
   var request = {
     origin: locationArray[1],
     destination: locationArray[0],
-    // Note that Javascript allows us to access the constant
-    // using square brackets and a string value as its
-    // "property."
-    travelMode: google.maps.TravelMode["WALKING"]
-};
-directionsService.route(request, function(response, status) {
-  if (status == 'OK') {
-    directionsDisplay.setDirections(response);
-  }
-});
+    travelMode: transitType
+  };
+  directionsService.route(request, function(response, status) {
+    if (status == 'OK') {
+      directionsDisplay.setDirections(response);
+    }
+  });
 }
 
 function matrixCallback(response, status) {
@@ -159,5 +166,25 @@ function matrixCallback(response, status) {
     },(function(error){
       console.log("error message: " + error.message + "\n" + "error code: " + error.code);
     }), options);
+  }
+
+  function setTravelMode(){
+    placeMarkers(locationArray)
+    switch(this.value){
+      case "WALKING":
+        transitType = google.maps.TravelMode.WALKING;
+        break;
+      case "DRIVING":
+        transitType = google.maps.TravelMode.DRIVING;
+        break;
+      case "TRANSIT":
+        transitType = google.maps.TravelMode.TRANSIT;
+        break;
+      default:
+        transitType = google.maps.TravelMode.WALKING;
+    }
+    if (locationArray[0] != null){
+      calcRoute();
+    }
   }
 }
