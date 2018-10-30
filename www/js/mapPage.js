@@ -26,8 +26,8 @@ function initMapPage() {
   walk.addEventListener("click",setTravelMode);
   drive.addEventListener("click",setTravelMode);
   transit.addEventListener("click",setTravelMode);
-  var locateSelfDOM = document.getElementById("locateSelfButton");
-  locateSelfDOM.addEventListener("click", getLocation);
+  //var locateSelfDOM = document.getElementById("locateSelfButton");
+  //locateSelfDOM.addEventListener("click", getLocation);
   var travelTimeButton = document.getElementById("startTravelButton")
   travelTimeButton.addEventListener("click", computeDistanceTime);
 
