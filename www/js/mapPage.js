@@ -47,15 +47,30 @@ function initMapPage() {
     var latLong = new google.maps.LatLng(lat, lng);
     locationArray[0] = latLong;
     placeMarkers(locationArray);
-    document.getElementById("startTravelButton").style.display = "block";
-    document.getElementById("map_canvas").style.height = "78vmax";
+    routeStartedHeader(false);
     console.log("destination latitude:" + lat);
     console.log("destination longitude:" + lng);
     mapWithPosition.fitBounds(bounds);//fit markers
     computeDistanceTime();
   });
 
-
+  function routeStartedHeader(option){//set map header to display options or not
+    switch(option){
+      case true:
+        document.getElementById("startTravelButton").style.display = "none";
+        document.getElementById("map_canvas").style.height = "90vmax";
+        document.getElementById("radioButtons").style.display = "none";
+        document.getElementById("timeDisplay").style.left = "34%";
+        break;
+      case false:
+        document.getElementById("startTravelButton").style.display = "block";
+        document.getElementById("radioButtons").style.display = "block";
+        document.getElementById("map_canvas").style.height = "78vmax";
+        document.getElementById("timeDisplay").style.left = "56%";
+        break;
+    }
+    
+  }
   function getLocation(){
     var latitude;
     var longitude;
@@ -197,10 +212,7 @@ function matrixCallback(response, status) {
   }
 
   function startRoute(){
-    document.getElementById("startTravelButton").style.display = "none";
-    document.getElementById("map_canvas").style.height = "90vmax";
-    document.getElementById("radioButtons").style.display = "none";
-    document.getElementById("timeDisplay").style.left = "34%";
+    routeStartedHeader(true);
     watchPosition();
 
   }
