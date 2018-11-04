@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!--hamburger menu-->
   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADrTPp87D6OAgTTLy2SZ8UdWukxXdKFnA"></script>
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADrTPp87D6OAgTTLy2SZ8UdWukxXdKFnA&libraries=places"></script>
+ <!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADrTPp87D6OAgTTLy2SZ8UdWukxXdKFnA&libraries=places"></script> -->
   <title>Map</title>
 </head>
 
@@ -35,7 +35,10 @@
         <label><input type="radio" id="transit" name="TransType" value="TRANSIT">Public Transit</label>
       </form>
       <div class="timeDisplay" id="timeDisplay"></div>
-      <div class="fa fa-bars" id="fafabars"></div>
+      <div class="fa fa-bars" id="fafabars">
+        <div class="contactsButton" id="contact-btn"><p>Contacts</p></div>
+        <div class="misc" id="misc"><p>Misc</p></div>
+      </div>
     </div>
 
     <div id="map_canvas"></div>
@@ -46,6 +49,7 @@
     <script type="text/javascript" src="js/mapPage.js"></script>
     <script>
       document.addEventListener("deviceready", initMapPage, false);
+     // document.addEventListnener("contactdown", onContactDown, false);
     </script>
 
 

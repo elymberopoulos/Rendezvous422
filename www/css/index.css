@@ -197,6 +197,33 @@ a{
     padding:10px;
     color: gray;
 }
+#mapmenu{
+    position: fixed;
+    display: none;
+    width: 0%;
+    height: 100%;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 60px;
+    background-color: #111;
+    transition: .5s;
+}
+#mapmenu links{
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #f7f5f5;
+    display: block;
+    transition: .3s;
+}
+#mapmenu close{
+    position: absolute;
+    top: 0; 
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
 #locateSelfButton{
   width: 15%;
   height: 100%;
