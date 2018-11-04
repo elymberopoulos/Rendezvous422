@@ -18,7 +18,7 @@
     <div class="placeSearch">
       <input type="text" placeholder="Destination" class="searchInput" id="placeSearch">
       <!--<input type="text" placeholder="Start Point" class="searchInput" id="startPoint">-->
-      <button type="button" id="locateSelfButton">loc</button>
+      <!--<button type="button" id="locateSelfButton">loc</button> -->
       <!-- assign values to these hidden inputs to retrieve later -->
       <div id="matrixCoordinates" style="display:none;">
         <input type="number" id="distanceMatrixStartLatitude" name="distanceMatrixStartLatitude" required>
@@ -34,6 +34,7 @@
         <label><input type="radio" id="drive" name="TransType" value="DRIVING">Drive</label><br>
         <label><input type="radio" id="transit" name="TransType" value="TRANSIT">Public Transit</label>
       </form>
+      <div class="timeDisplay" id="timeDisplay"></div>
       <div class="fa fa-bars" id="fafabars"></div>
     </div>
 

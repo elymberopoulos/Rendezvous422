@@ -80,7 +80,7 @@ function onLoad() {
 
 }
 var destinationPOS;
-function setupMap() {//creates default map and adds destination event listener
+/*function setupMap() {//creates default map and adds destination event listener
   var mapOptions = {
     center: new google.maps.LatLng(39.8283, -98.5795),
     zoom: 3,
@@ -108,7 +108,7 @@ function setupMap() {//creates default map and adds destination event listener
     mapWithPosition.setCenter(marker.getPosition());
     
   });
-}
+}*/
 
 function saveCoordinates() {
   //use navigator to get latitude and longitude and store
