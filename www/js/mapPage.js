@@ -27,9 +27,12 @@ function initMapPage() {
   var walk = document.getElementById("walk");
   var drive = document.getElementById("drive");
   var transit = document.getElementById("transit");
+  //var hamburger = document.getElementById("")
+  //var contact = document.getElementById("contact-btn");
   walk.addEventListener("click",setTravelMode);
   drive.addEventListener("click",setTravelMode);
   transit.addEventListener("click",setTravelMode);
+  contact.addEventListener("click", onContactDown);
   //var locateSelfDOM = document.getElementById("locateSelfButton");
   //locateSelfDOM.addEventListener("click", getLocation);
   var startTravelBtn = document.getElementById("startTravelButton")
@@ -235,4 +238,8 @@ function matrixCallback(response, status) {
   function contactError(error){
     console.log("Cannot find contacts because of error: " + error);
   }
+  function onContactDown(){
+    //
+  }
+
 }
