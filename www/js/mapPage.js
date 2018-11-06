@@ -69,8 +69,8 @@ function initMapPage() {
         document.getElementById("timeDisplay").style.left = "56%";
         break;
     }
-    
   }
+
   function getLocation(){
     var latitude;
     var longitude;
@@ -84,7 +84,7 @@ function initMapPage() {
       alert("Could not find location, Turn on location and try again");
       document.location.href = 'index.html';
     },
-    {enableHighAccuracy: false, timeout: 8000});
+    {enableHighAccuracy: true, timeout: 8000});
   }
   function onLocateSuccess(latitude, longitude){
     document.getElementById("waitForLocation").style.display = "none";
@@ -98,16 +98,16 @@ function initMapPage() {
     console.log("Starting longitude:" + longitude);
     //watchPosition();
   }
-  var markerArray = []
 
-  function clearMarkers(){
-    for (var i = 0; i < markerArray.length; i++ ) {
-      markerArray[i].setMap(null);
+  var markerArray = [] //start and end markers 
+  function clearMarkers(mArray){
+    for (var i = 0; i < mArray.length; i++ ) {
+      mArray[i].setMap(null);
     }
   }
 
   function placeMarkers(markers){
-    clearMarkers();
+    clearMarkers(markerArray);
     markers.forEach(function(element) {
       var marker = new google.maps.Marker({
         map: mapWithPosition,
@@ -145,7 +145,7 @@ function computeDistanceTime() {
 }
 
 function calcRoute(){
-  clearMarkers();
+  clearMarkers(markerArray);
   var request = {
     origin: locationArray[1],
     destination: locationArray[0],
@@ -180,11 +180,24 @@ function matrixCallback(response, status) {
       maximumAge: 3500,
       timeout: 5000
     };
+
+    var curMarker = new google.maps.Marker({
+      map: mapWithPosition,
+      position: locationArray[1],
+      icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+    });
+    markerArray[1].setMap(null);
+    curMarker.setMap(mapWithPosition);
+    mapWithPosition.setZoom(17);
+    mapWithPosition.setCenter(curMarker.getPosition());
+
     var watchID = navigator.geolocation.watchPosition(function(position){
       var watchedLatitude = position.coords.latitude;
       var watchedLongitude = position.coords.longitude;
       console.log("watchedLatitude is: " + watchedLatitude);
       console.log("watchedLongitude is: " + watchedLongitude);
+      var curLatLng = new google.maps.LatLng(watchedLatitude, watchedLongitude);//move marker with user
+      curMarker.setPosition(curLatLng)
     },(function(error){
       console.log("Watch Position error message: " + error.message + "\n" + "error code: " + error.code);
     }), options);
