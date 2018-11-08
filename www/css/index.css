@@ -195,7 +195,7 @@ a{
     display: inline-block;
     font-size: 36px;
     padding:10px;
-    color: gray;
+    color: rgb(236, 58, 58);
 }
 #mapmenu{
     position: fixed;
@@ -254,7 +254,8 @@ a{
 
 .waitForLocation{
     position: fixed; 
-    display: block; 
+    /*display: block;*/
+    display: none; 
     width: 100%; 
     height: 100%; 
     top: 0; 

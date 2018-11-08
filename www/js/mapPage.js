@@ -27,12 +27,14 @@ function initMapPage() {
   var walk = document.getElementById("walk");
   var drive = document.getElementById("drive");
   var transit = document.getElementById("transit");
-  //var hamburger = document.getElementById("")
+  var hamburger = document.getElementById("fafabars");
+  //var hamclose = document.getElementById("")
   //var contact = document.getElementById("contact-btn");
   walk.addEventListener("click",setTravelMode);
   drive.addEventListener("click",setTravelMode);
   transit.addEventListener("click",setTravelMode);
-  contact.addEventListener("click", onContactDown);
+  //contact.addEventListener("click", onContactDown);
+  hamburger.addEventListener("click", openNav);
   //var locateSelfDOM = document.getElementById("locateSelfButton");
   //locateSelfDOM.addEventListener("click", getLocation);
   var startTravelBtn = document.getElementById("startTravelButton")
@@ -239,7 +241,15 @@ function matrixCallback(response, status) {
     console.log("Cannot find contacts because of error: " + error);
   }
   function onContactDown(){
-    //
+    //findContact();
+  }
+  function openNav(){
+    document.getElementById("mapmenu").style.width = "250px";
+    document.getElementById("mapmenu").style.display = "inline-block"
+  }
+  function closeNav(){
+    document.getElementById("mapmenu").style.width = "0px";
+    document.getElementById("mapmenu").style.display = "none";
   }
 
 }
