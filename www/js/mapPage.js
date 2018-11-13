@@ -60,7 +60,11 @@ function initMapPage() {
         document.getElementById("startTravelButton").style.display = "none";
         document.getElementById("map_canvas").style.height = "90vmax";
         document.getElementById("radioButtons").style.display = "none";
-        document.getElementById("timeDisplay").style.left = "34%";
+        document.getElementById("timeDisplay").style.left = "20%";
+        document.getElementById("timeDisplay").style.bottom = "40%";
+        document.getElementById("timeDisplay").style.width = "64%";
+        document.getElementById("timeDisplay").style.fontSize = "20px";
+        document.getElementById("placeSearch").style.display = "none";
         break;
       case false:
         document.getElementById("startTravelButton").style.display = "block";
@@ -124,7 +128,7 @@ function initMapPage() {
 
 function computeDistanceTime() {
   directionsDisplay.setMap(mapWithPosition);
-  calcRoute(false);
+  calcRoute();
   var startLat = document.getElementById("distanceMatrixStartLatitude").value;
   var startLng = document.getElementById("distanceMatrixStartLongitude").value;
   var destinationLat = document.getElementById("distanceMatrixDestinationLatitude").value;
@@ -197,7 +201,18 @@ function matrixCallback(response, status) {
       console.log("watchedLatitude is: " + watchedLatitude);
       console.log("watchedLongitude is: " + watchedLongitude);
       var curLatLng = new google.maps.LatLng(watchedLatitude, watchedLongitude);//move marker with user
-      curMarker.setPosition(curLatLng)
+      curMarker.setPosition(curLatLng);
+      if(checkArrival(locationArray[0],curLatLng,watchID)){
+        alert('You have arrived');
+      }
+      distanceService.getDistanceMatrix({
+        origins: [curLatLng],
+        destinations: [locationArray[0]],
+        travelMode: transitType,
+        unitSystem: google.maps.UnitSystem.IMPERIAL,
+        avoidHighways: false,
+        avoidTolls: false
+      }, matrixCallback);
     },(function(error){
       console.log("Watch Position error message: " + error.message + "\n" + "error code: " + error.code);
     }), options);
@@ -227,7 +242,20 @@ function matrixCallback(response, status) {
   function startRoute(){
     routeStartedHeader(true);
     watchPosition();
+  }
 
+  function checkArrival(destinationLatLng,watchedLatLng,watcher){//check arrival and clear watch position if true 
+    if(((destinationLatLng.lat()-.0004)< watchedLatLng.lat()) && (watchedLatLng.lat() < (destinationLatLng.lat()+.0004))){
+      if((destinationLatLng.lng()-.0004)< watchedLatLng.lng() && watchedLatLng.lng() < (destinationLatLng.lng()+.0004)){
+        navigator.geolocation.clearWatch(watcher);
+        console.log("true");
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
   }
 
   function findContact(){
