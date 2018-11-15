@@ -35,6 +35,7 @@ function initMapPage() {
   transit.addEventListener("click",setTravelMode);
   //contact.addEventListener("click", onContactDown);
   hamburger.addEventListener("click", openNav);
+  hamburger.addEventListener("touchstart", openNav, false);
   //var locateSelfDOM = document.getElementById("locateSelfButton");
   //locateSelfDOM.addEventListener("click", getLocation);
   var startTravelBtn = document.getElementById("startTravelButton")
@@ -244,12 +245,10 @@ function matrixCallback(response, status) {
     //findContact();
   }
   function openNav(){
-    document.getElementById("mapmenu").style.width = "250px";
-    document.getElementById("mapmenu").style.display = "inline-block"
+    document.getElementById("mapmenu").style.visibility = "visible";
   }
   function closeNav(){
-    document.getElementById("mapmenu").style.width = "0px";
-    document.getElementById("mapmenu").style.display = "none";
+    document.getElementById("mapmenu").style.visibility = "hidden";
   }
 
 }

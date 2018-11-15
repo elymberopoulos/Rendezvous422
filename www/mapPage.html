@@ -35,18 +35,19 @@
         <label><input type="radio" id="transit" name="TransType" value="TRANSIT">Public Transit</label>
       </form>
       <div class="timeDisplay" id="timeDisplay"></div>
-      <div class="fa fa-bars" id="fafabars">
-        <div class="menu" id="mapmenu">
-          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a> 
-          <div class="contactsButton" id="contact-btn"><p>Contacts</p></div>
-          <div class="misc" id="misc"><p>Misc</p></div>
-        </div>
-      </div> 
+      <div class="fa fa-bars" id="fafabars"></div>
     </div>
-    
+
     <div id="map_canvas"></div>
+    <nav id="mapmenu">
+      <ul id="mapmenu links">
+        <!-- <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a> -->
+        <div class="contactsButton" id="contact-btn"><p>Contacts</p></div>
+        <div class="misc" id="misc"><p>Misc</p></div>
+      </ul>
+    </nav>
     <div class="startButton" id="startTravelButton"> <p style="font-weight: bold">Start Route</p> </div>
-    <div class="waitForLocation" id="waitForLocation">Waiting for Location</div>
+    <!--<div class="waitForLocation" id="waitForLocation">Waiting for Location</div> -->
 
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/mapPage.js"></script>
