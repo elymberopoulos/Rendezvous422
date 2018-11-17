@@ -19,15 +19,16 @@
       <h4 class="moto">Providing Peace of Mind</h4>
     </div>
     <div class="login">
-      <h2 class="loginButton" id="loginBtn">Login</h2>
-      <h2 class="loginButton" id="registerBtn"><a href="register.html">Register</a></h2>
-      <h2 class="loginButton" id="mapPageBtn"><a href="mapPage.html">Map</a></h2>
+      <h2 class="loginButton" id="loginBtn" style="visibility:hidden">Login</h2>
+      <h2 class="loginButton" id="registerBtn" style="visibility:hidden"><a href="register.html">Register</a></h2>
+      <h2 class="loginButton" id="mapPageBtn" style="visibility:hidden"><a href="mapPage.html">Map</a></h2>
     </div>
   </div>
   <script src="https://www.gstatic.com/firebasejs/5.5.8/firebase.js"></script>
   <script type="text/javascript" src="js/fireBase.js"></script>
   <script>
     document.addEventListener("deviceready", fireBaseInit, false);
+    document.addEventListener("online", fireBaseInit, false);
   </script>
 
 </body>
