@@ -1,6 +1,14 @@
 
 function initMapPage() {
   getLocation();
+
+  var routeOptions = {
+    transitType: google.maps.TravelMode.WALKING,
+    gracePeriod:null,
+    travelTime:null,
+    locationArray: []
+  }
+
   var div = document.getElementById("map_canvas");
   var mapOptions = {
     center: new google.maps.LatLng(39.8283, -98.5795),
@@ -8,9 +16,9 @@ function initMapPage() {
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
  
-  var locationArray = []; //first is destination, second is start
-  var transitType = google.maps.TravelMode.WALKING;
-  var travelTime;
+  //var routeOptions.locationArray = []; //first is destination, second is start
+  //var transitType = google.maps.TravelMode.WALKING;
+  //var travelTime;
   
   //API declarations 
   var input = document.getElementById('placeSearch');
@@ -45,8 +53,8 @@ function initMapPage() {
     document.getElementById("distanceMatrixDestinationLatitude").value = lat;
     document.getElementById("distanceMatrixDestinationLongitude").value = lng;
     var latLong = new google.maps.LatLng(lat, lng);
-    locationArray[0] = latLong;
-    placeMarkers(locationArray);
+    routeOptions.locationArray[0] = latLong;
+    placeMarkers(routeOptions.locationArray);
     routeStartedHeader(false);
     console.log("destination latitude:" + lat);
     console.log("destination longitude:" + lng);
@@ -94,8 +102,8 @@ function initMapPage() {
     document.getElementById("waitForLocation").style.display = "none";
     directionsDisplay.setMap(null);
     var latLong = new google.maps.LatLng(latitude, longitude);
-    locationArray[1] = latLong;
-    placeMarkers(locationArray);
+    routeOptions.locationArray[1] = latLong;
+    placeMarkers(routeOptions.locationArray);
     document.getElementById("distanceMatrixStartLatitude").value = latitude;
     document.getElementById("distanceMatrixStartLongitude").value = longitude;
     console.log("Starting latitude:" + latitude);
@@ -141,7 +149,7 @@ function computeDistanceTime() {
   distanceService.getDistanceMatrix({
     origins: [originValues],
     destinations: [destinationValues],
-    travelMode: transitType,
+    travelMode: routeOptions.transitType,
     unitSystem: google.maps.UnitSystem.IMPERIAL,
     avoidHighways: false,
     avoidTolls: false
@@ -151,9 +159,9 @@ function computeDistanceTime() {
 function calcRoute(){
   clearMarkers(markerArray);
   var request = {
-    origin: locationArray[1],
-    destination: locationArray[0],
-    travelMode: transitType
+    origin: routeOptions.locationArray[1],
+    destination: routeOptions.locationArray[0],
+    travelMode: routeOptions.transitType
   };
   directionsService.route(request, function(response, status) {
     if (status == 'OK') {
@@ -174,8 +182,8 @@ function matrixCallback(response, status) {
     console.log('reponse = ', response);
     console.log(distanceObj.text);
     console.log(durationObj.text);
-    travelTime = durationObj.text;
-    document.getElementById("timeDisplay").innerHTML = travelTime + '<br>' + distanceObj.text;
+    routeOptions.travelTime = durationObj.text;//Original Travel time then travel time remaining on WatchPosition
+    document.getElementById("timeDisplay").innerHTML = routeOptions.travelTime + '<br>' + distanceObj.text;
   }
 }
   function watchPosition(){
@@ -187,7 +195,7 @@ function matrixCallback(response, status) {
 
     var curMarker = new google.maps.Marker({
       map: mapWithPosition,
-      position: locationArray[1],
+      position: routeOptions.locationArray[1],
       icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
     });
     markerArray[1].setMap(null);
@@ -202,13 +210,13 @@ function matrixCallback(response, status) {
       console.log("watchedLongitude is: " + watchedLongitude);
       var curLatLng = new google.maps.LatLng(watchedLatitude, watchedLongitude);//move marker with user
       curMarker.setPosition(curLatLng);
-      if(checkArrival(locationArray[0],curLatLng,watchID)){
+      if(checkArrival(routeOptions.locationArray[0],curLatLng,watchID)){
         alert('You have arrived');
       }
-      distanceService.getDistanceMatrix({
+      distanceService.getDistanceMatrix({//update travel time remaining 
         origins: [curLatLng],
-        destinations: [locationArray[0]],
-        travelMode: transitType,
+        destinations: [routeOptions.locationArray[0]],
+        travelMode: routeOptions.transitType,
         unitSystem: google.maps.UnitSystem.IMPERIAL,
         avoidHighways: false,
         avoidTolls: false
@@ -219,28 +227,29 @@ function matrixCallback(response, status) {
   }
 
   function setTravelMode(){
-    placeMarkers(locationArray)
+    placeMarkers(routeOptions.locationArray)
     switch(this.value){
       case "WALKING":
-        transitType = google.maps.TravelMode.WALKING;
+        routeOptions.transitType = google.maps.TravelMode.WALKING;
         break;
       case "DRIVING":
-        transitType = google.maps.TravelMode.DRIVING;
+        routeOptions.transitType = google.maps.TravelMode.DRIVING;
         break;
       case "TRANSIT":
-        transitType = google.maps.TravelMode.TRANSIT;
+        routeOptions.transitType = google.maps.TravelMode.TRANSIT;
         break;
       default:
-        transitType = google.maps.TravelMode.WALKING;
+        routeOptions.transitType = google.maps.TravelMode.WALKING;
     }
     computeDistanceTime();
-    if (locationArray[0] != null){
+    if (routeOptions.locationArray[0] != null){
       calcRoute();
     }
   }
 
   function startRoute(){
     routeStartedHeader(true);
+    //currentDate();
     watchPosition();
   }
 
@@ -258,7 +267,25 @@ function matrixCallback(response, status) {
     }
   }
 
+  /*function currentDate(){
+    var d = new Date();
+    var milliseconds = d.getTime();
+    alert(milliseconds);
+    return milliseconds;
+  }*/
+  document.getElementById("testBtn").addEventListener("click",findContact);
+
   function findContact(){
+    var contact = navigator.contacts.pickContact(contactSuccess(contact),contactError(contact));
+  }
+  function contactSuccess(contact){
+    alert('Found ' + contact.length + ' contacts.');
+  }
+  function contactError(error){
+    console.log("Cannot find contacts because of error: " + error);
+  }
+
+  /*function findContact(){
     var searchInput = document.getElementById(CONTACTSINPUTFIELD).value;
     var options = new ContactFindOptions();
     options.filter = searchInput;
@@ -275,5 +302,5 @@ function matrixCallback(response, status) {
   }
   function contactError(error){
     console.log("Cannot find contacts because of error: " + error);
-  }
+  }*/
 }
