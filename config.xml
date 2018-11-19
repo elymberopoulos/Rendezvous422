@@ -29,5 +29,22 @@
         <variable name="PLAY_SERVICES_VERSION" value="15.0.1" />
         <variable name="ANDROID_SUPPORT_V4_VERSION" value="27.+" />
     </plugin>
+    <plugin name="cordova-plugin-buildinfo" spec="2.0.2" />
+    <plugin name="cordova-universal-links-plugin" spec="1.2.1" />
+    <plugin name="cordova-plugin-browsertab" spec="0.2.0" />
+    <plugin name="cordova-plugin-inappbrowser" spec="3.0.0" />
+    <plugin name="cordova-plugin-customurlscheme" spec="4.3.0">
+        <variable name="URL_SCHEME" value="com.firebase.cordova" />
+        <variable name="ANDROID_SCHEME" value=" " />
+        <variable name="ANDROID_HOST" value=" " />
+        <variable name="ANDROID_PATHPREFIX" value="/" />
+    </plugin>
+    <universal-links>
+        <host name="rendezvous.page.link" scheme="https" />
+        <host name="rendezvous-219221.firebaseapp.com" scheme="https">
+            <path url="/__/auth/callback" />
+        </host>
+    </universal-links>
+    <plugin name="cordova-plugin-network-information" spec="^2.0.1" />
     <engine name="android" spec="^7.0.0" />
 </widget>
