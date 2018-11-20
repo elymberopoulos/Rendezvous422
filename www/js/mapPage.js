@@ -1,4 +1,3 @@
-
 function initMapPage() {
   getLocation();
 
@@ -15,15 +14,28 @@ function initMapPage() {
     zoom: 3,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
- 
-  //var routeOptions.locationArray = []; //first is destination, second is start
+
+  //var locationArray = []; //first is destination, second is start
   //var transitType = google.maps.TravelMode.WALKING;
   //var travelTime;
-  
+
+  // //FIREBASE Declarations
+  // var user = firebase.auth().currentUser;
+  // var userName;
+  // if(user !== null){
+  //   userName = user.displayName;
+  // }
+  // else{
+  //   userName = null;
+  // }
+  // const db = firebase.database();
+  // console.log(userName);
+
+
   //API declarations 
   var input = document.getElementById('placeSearch');
   var autocomplete = new google.maps.places.Autocomplete(input);
-  var bounds = new google.maps.LatLngBounds();//allows zooming of map to fit markers 
+  var bounds = new google.maps.LatLngBounds(); //allows zooming of map to fit markers 
   var directionsService = new google.maps.DirectionsService();
   var directionsDisplay = new google.maps.DirectionsRenderer();
   var distanceService = new google.maps.DistanceMatrixService();
@@ -32,20 +44,24 @@ function initMapPage() {
   directionsDisplay.setMap(mapWithPosition);
 
   //EVENT LISTENERS 
+  var hamburgerButton = document.getElementById("fafabars").addEventListener("click", hamburgerMenu);
+  var closeHamburgerButton = document.getElementById("closeFaFaBars").addEventListener("click", hamburgerMenu);
+  var menu = document.getElementById("mapPageHamburgerScreen");
+  var closeMenu = document.getElementById("closeFaFaBars");
   var walk = document.getElementById("walk");
   var drive = document.getElementById("drive");
   var transit = document.getElementById("transit");
-  walk.addEventListener("click",setTravelMode);
-  drive.addEventListener("click",setTravelMode);
-  transit.addEventListener("click",setTravelMode);
+  walk.addEventListener("click", setTravelMode);
+  drive.addEventListener("click", setTravelMode);
+  transit.addEventListener("click", setTravelMode);
   //var locateSelfDOM = document.getElementById("locateSelfButton");
   //locateSelfDOM.addEventListener("click", getLocation);
   var startTravelBtn = document.getElementById("startTravelButton")
   startTravelBtn.addEventListener("click", startRoute);
 
 
-  google.maps.event.addListener(autocomplete, 'place_changed', function() {
-    directionsDisplay.setMap(null);//clear route line
+  google.maps.event.addListener(autocomplete, 'place_changed', function () {
+    directionsDisplay.setMap(null); //clear route line
 
     var place = autocomplete.getPlace();
     var lat = place.geometry.location.lat();
@@ -58,12 +74,12 @@ function initMapPage() {
     routeStartedHeader(false);
     console.log("destination latitude:" + lat);
     console.log("destination longitude:" + lng);
-    mapWithPosition.fitBounds(bounds);//fit markers
+    mapWithPosition.fitBounds(bounds); //fit markers
     computeDistanceTime();
   });
 
-  function routeStartedHeader(option){//set map header to display options or not
-    switch(option){
+  function routeStartedHeader(option) { //set map header to display options or not
+    switch (option) {
       case true:
         document.getElementById("startTravelButton").style.display = "none";
         document.getElementById("map_canvas").style.height = "90vmax";
@@ -83,22 +99,25 @@ function initMapPage() {
     }
   }
 
-  function getLocation(){
+  function getLocation() {
     var latitude;
     var longitude;
 
-    navigator.geolocation.getCurrentPosition(function(position){
+    navigator.geolocation.getCurrentPosition(function (position) {
       latitude = position.coords.latitude;
       longitude = position.coords.longitude;
       onLocateSuccess(latitude, longitude);
-    }, function(error){
+    }, function (error) {
       console.log("error message: " + error.message + "\n" + "error code: " + error.code);
       alert("Could not find location, Turn on location and try again");
       document.location.href = 'index.html';
-    },
-    {enableHighAccuracy: true, timeout: 8000});
+    }, {
+      enableHighAccuracy: true,
+      timeout: 8000
+    });
   }
-  function onLocateSuccess(latitude, longitude){
+
+  function onLocateSuccess(latitude, longitude) {
     document.getElementById("waitForLocation").style.display = "none";
     directionsDisplay.setMap(null);
     var latLong = new google.maps.LatLng(latitude, longitude);
@@ -112,15 +131,15 @@ function initMapPage() {
   }
 
   var markerArray = [] //start and end markers 
-  function clearMarkers(mArray){
-    for (var i = 0; i < mArray.length; i++ ) {
+  function clearMarkers(mArray) {
+    for (var i = 0; i < mArray.length; i++) {
       mArray[i].setMap(null);
     }
   }
 
-  function placeMarkers(markers){
+  function placeMarkers(markers) {
     clearMarkers(markerArray);
-    markers.forEach(function(element) {
+    markers.forEach(function (element) {
       var marker = new google.maps.Marker({
         map: mapWithPosition,
         position: element,
@@ -130,9 +149,10 @@ function initMapPage() {
       marker.setMap(mapWithPosition);
       mapWithPosition.setZoom(14);
       mapWithPosition.setCenter(marker.getPosition());
-      bounds.extend(marker.getPosition());//extend bounds for map to fit markers
-    });     
+      bounds.extend(marker.getPosition()); //extend bounds for map to fit markers
+    });
   }
+
 
 function computeDistanceTime() {
   directionsDisplay.setMap(mapWithPosition);
@@ -185,8 +205,8 @@ function matrixCallback(response, status) {
     routeOptions.travelTime = durationObj.text;//Original Travel time then travel time remaining on WatchPosition
     document.getElementById("timeDisplay").innerHTML = routeOptions.travelTime + '<br>' + distanceObj.text;
   }
-}
-  function watchPosition(){
+
+  function watchPosition() {
     var options = {
       enableHighAccuracy: true,
       maximumAge: 3500,
@@ -203,14 +223,16 @@ function matrixCallback(response, status) {
     mapWithPosition.setZoom(17);
     mapWithPosition.setCenter(curMarker.getPosition());
 
-    var watchID = navigator.geolocation.watchPosition(function(position){
+    var watchID = navigator.geolocation.watchPosition(function (position) {
       var watchedLatitude = position.coords.latitude;
       var watchedLongitude = position.coords.longitude;
       console.log("watchedLatitude is: " + watchedLatitude);
       console.log("watchedLongitude is: " + watchedLongitude);
-      var curLatLng = new google.maps.LatLng(watchedLatitude, watchedLongitude);//move marker with user
+      var curLatLng = new google.maps.LatLng(watchedLatitude, watchedLongitude); //move marker with user
       curMarker.setPosition(curLatLng);
+
       if(checkArrival(routeOptions.locationArray[0],curLatLng,watchID)){
+
         alert('You have arrived');
       }
       distanceService.getDistanceMatrix({//update travel time remaining 
@@ -221,10 +243,11 @@ function matrixCallback(response, status) {
         avoidHighways: false,
         avoidTolls: false
       }, matrixCallback);
-    },(function(error){
+    }, (function (error) {
       console.log("Watch Position error message: " + error.message + "\n" + "error code: " + error.code);
     }), options);
   }
+
 
   function setTravelMode(){
     placeMarkers(routeOptions.locationArray)
@@ -247,25 +270,26 @@ function matrixCallback(response, status) {
     }
   }
 
-  function startRoute(){
+  function startRoute() {
     routeStartedHeader(true);
     //currentDate();
     watchPosition();
   }
 
-  function checkArrival(destinationLatLng,watchedLatLng,watcher){//check arrival and clear watch position if true 
-    if(((destinationLatLng.lat()-.0004)< watchedLatLng.lat()) && (watchedLatLng.lat() < (destinationLatLng.lat()+.0004))){
-      if((destinationLatLng.lng()-.0004)< watchedLatLng.lng() && watchedLatLng.lng() < (destinationLatLng.lng()+.0004)){
+  function checkArrival(destinationLatLng, watchedLatLng, watcher) { //check arrival and clear watch position if true 
+    if (((destinationLatLng.lat() - .0004) < watchedLatLng.lat()) && (watchedLatLng.lat() < (destinationLatLng.lat() + .0004))) {
+      if ((destinationLatLng.lng() - .0004) < watchedLatLng.lng() && watchedLatLng.lng() < (destinationLatLng.lng() + .0004)) {
         navigator.geolocation.clearWatch(watcher);
         console.log("true");
         return true;
-      }else{
+      } else {
         return false;
       }
-    }else{
+    } else {
       return false;
     }
   }
+
 
   /*function currentDate(){
     var d = new Date();
@@ -282,14 +306,25 @@ function matrixCallback(response, status) {
     options.desiredFields = [navigator.contacts.fieldType.name, navigator.contacts.fieldType.phoneNumbers];
     options.hasPhoneNumber = true;
     var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name,
-      navigator.contacts.fieldType.phoneNumbers];
+      navigator.contacts.fieldType.phoneNumbers
+    ];
     navigator.contacts.find(fields, contactSuccess, contactError, options);
     navigator.contacts.find
   }
-  function contactSuccess(contacts){
+
+  function contactSuccess(contacts) {
     alert('Found ' + contacts.length + ' contacts.');
   }
-  function contactError(error){
+
+  function contactError(error) {
     console.log("Cannot find contacts because of error: " + error);
+  }
+
+  function hamburgerMenu() {
+    if (menu.style.width == "0%") {
+      menu.style.width = "55%";
+    } else if (menu.style.width !== "0%") {
+      menu.style.width = "0%";
+    }
   }
 }
