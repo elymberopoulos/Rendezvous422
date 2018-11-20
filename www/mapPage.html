@@ -26,27 +26,61 @@
         <input type="number" id="distanceMatrixDestinationLatitude" name="distanceMatrixDestinationLatitude" required>
         <input type="number" id="distanceMatrixDestinationLongitude" name="distanceMatrixDestinationLongitude" required>
       </div>
-        <!-- ============================================================================================================= -->
+      <!-- ============================================================================================================= -->
 
-      </div>
-      <form class="radio" id='radioButtons'>
-        <label><input type="radio" id="walk" name="TransType" value="WALKING" checked="checked">Walk</label>
-        <label><input type="radio" id="drive" name="TransType" value="DRIVING">Drive</label><br>
-        <label><input type="radio" id="transit" name="TransType" value="TRANSIT">Public Transit</label>
-      </form>
-      <div class="timeDisplay" id="timeDisplay"></div>
-      <div class="fa fa-bars" id="fafabars"></div>
+    </div>
+    <!-- <form class="radio" id='radioButtons'>
+      <label><input type="radio" id="walk" name="TransType" value="WALKING" checked="checked">Walk</label>
+      <label><input type="radio" id="drive" name="TransType" value="DRIVING">Drive</label><br>
+      <label><input type="radio" id="transit" name="TransType" value="TRANSIT">Public Transit</label>
+    </form> -->
+    <div class="timeDisplay" id="timeDisplay"></div>
+    <div class="fa fa-bars" id="fafabars"></div>
+  </div>
+
+  <div id="map_canvas"></div>
+  <div id="mapPageHamburgerScreen">
+    <div id="closeFaFaBars">
+      <div class="faFaBar"></div>
+      <div class="faFaBar"></div>
+      <div class="faFaBar"></div>
+    </div>
+    <button class="hamburgerAccordion">Contacts</button>
+    <button class="hamburgerAccordion">Transit Mode</button>
+    <div class="hamburgerPanel">
+      <label><input type="radio" id="walk" name="TransType" value="WALKING" checked="checked">Walk</label>
+      <label><input type="radio" id="drive" name="TransType" value="DRIVING">Drive</label><br>
+      <label><input type="radio" id="transit" name="TransType" value="TRANSIT">Public Transit</label>
+
     </div>
 
-    <div id="map_canvas"></div>
-    <div class="startButton" id="startTravelButton"> <p style="font-weight: bold">Start Route</p> </div>
-    <div class="waitForLocation" id="waitForLocation">Waiting for Location</div>
 
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="js/mapPage.js"></script>
-    <script>
-      document.addEventListener("deviceready", initMapPage, false);
-    </script>
+  </div>
+  <div class="startButton" id="startTravelButton">
+    <p style="font-weight: bold">Start Route</p>
+  </div>
+  <div class="waitForLocation" id="waitForLocation">Waiting for Location</div>
+
+
+  <script src="https://www.gstatic.com/firebasejs/5.5.8/firebase.js"></script>
+  <script type="text/javascript" src="cordova.js"></script>
+  <script type="text/javascript" src="js/mapPage.js"></script>
+  <script>
+    document.addEventListener("deviceready", initMapPage, false);
+    var acc = document.getElementsByClassName("hamburgerAccordion");
+    var i;
+    for (i = 0; i < acc.length; i++) {
+      acc[i].addEventListener("click", function () {
+        this.classList.toggle("active");
+        var panel = this.nextElementSibling;
+        if (panel.style.maxHeight) {
+          panel.style.maxHeight = null;
+        } else {
+          panel.style.maxHeight = panel.scrollHeight + "px";
+        }
+      });
+    }
+  </script>
 
 
 </body>
