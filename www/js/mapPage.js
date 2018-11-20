@@ -273,19 +273,8 @@ function matrixCallback(response, status) {
     alert(milliseconds);
     return milliseconds;
   }*/
-  document.getElementById("testBtn").addEventListener("click",findContact);
-
+  
   function findContact(){
-    var contact = navigator.contacts.pickContact(contactSuccess(contact),contactError(contact));
-  }
-  function contactSuccess(contact){
-    alert('Found ' + contact.length + ' contacts.');
-  }
-  function contactError(error){
-    console.log("Cannot find contacts because of error: " + error);
-  }
-
-  /*function findContact(){
     var searchInput = document.getElementById(CONTACTSINPUTFIELD).value;
     var options = new ContactFindOptions();
     options.filter = searchInput;
@@ -302,5 +291,5 @@ function matrixCallback(response, status) {
   }
   function contactError(error){
     console.log("Cannot find contacts because of error: " + error);
-  }*/
+  }
 }
