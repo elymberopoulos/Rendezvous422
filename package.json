@@ -33,7 +33,6 @@
             },
             "cordova-plugin-buildinfo": {},
             "cordova-universal-links-plugin": {},
-            "cordova-plugin-browsertab": {},
             "cordova-plugin-inappbrowser": {},
             "cordova-plugin-customurlscheme": {
                 "URL_SCHEME": "com.firebase.cordova",
@@ -41,7 +40,8 @@
                 "ANDROID_HOST": " ",
                 "ANDROID_PATHPREFIX": "/"
             },
-            "cordova-plugin-network-information": {}
+            "cordova-plugin-network-information": {},
+            "cordova-plugin-browsertab": {}
         },
         "platforms": [
             "android"
