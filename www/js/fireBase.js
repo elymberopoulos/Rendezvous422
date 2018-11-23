@@ -69,6 +69,10 @@ function fireBaseInit() {
   else{
     alert("This application requires a network connection. No network connection detected.");
   }
+  document.getElementById("test").addEventListener("click",test);
 
+  function test(){
+    alert("working");
+  }
 
 }

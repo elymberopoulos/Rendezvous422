@@ -304,7 +304,7 @@ a{
 .timeDisplay{
     position: absolute;
     bottom: 20%;
-    left: 56%;
+    left: 33%;
     height: 32%;
     width: 32%;
     text-align: center;
@@ -385,6 +385,7 @@ h1 {
 
 .hamburgerPanel {
     padding: 0 18px;
+    text-align: center;
     background-color: white;
     max-height: 0;
     overflow: hidden;

@@ -71,7 +71,7 @@ function initMapPage() {
     var latLong = new google.maps.LatLng(lat, lng);
     routeOptions.locationArray[0] = latLong;
     placeMarkers(routeOptions.locationArray);
-    routeStartedHeader(false);
+    //routeStartedHeader(false);
     console.log("destination latitude:" + lat);
     console.log("destination longitude:" + lng);
     mapWithPosition.fitBounds(bounds); //fit markers
@@ -83,7 +83,7 @@ function initMapPage() {
       case true:
         document.getElementById("startTravelButton").style.display = "none";
         document.getElementById("map_canvas").style.height = "90vmax";
-        document.getElementById("radioButtons").style.display = "none";
+        //document.getElementById("radioButtons").style.display = "none";
         document.getElementById("timeDisplay").style.left = "20%";
         document.getElementById("timeDisplay").style.bottom = "40%";
         document.getElementById("timeDisplay").style.width = "64%";
@@ -92,7 +92,7 @@ function initMapPage() {
         break;
       case false:
         document.getElementById("startTravelButton").style.display = "block";
-        document.getElementById("radioButtons").style.display = "block";
+        //document.getElementById("radioButtons").style.display = "block";
         document.getElementById("map_canvas").style.height = "78vmax";
         document.getElementById("timeDisplay").style.left = "56%";
         break;
@@ -205,6 +205,7 @@ function matrixCallback(response, status) {
     routeOptions.travelTime = durationObj.text;//Original Travel time then travel time remaining on WatchPosition
     document.getElementById("timeDisplay").innerHTML = routeOptions.travelTime + '<br>' + distanceObj.text;
   }
+}
 
   function watchPosition() {
     var options = {
@@ -271,7 +272,7 @@ function matrixCallback(response, status) {
   }
 
   function startRoute() {
-    routeStartedHeader(true);
+    //routeStartedHeader(true);
     //currentDate();
     watchPosition();
   }
