@@ -1,6 +1,13 @@
 function initMapPage() {
   getLocation();
 
+  var routeOptions = {
+    transitType: google.maps.TravelMode.WALKING,
+    gracePeriod:null,
+    travelTime:null,
+    locationArray: []
+  }
+
   var div = document.getElementById("map_canvas");
   var mapOptions = {
     center: new google.maps.LatLng(39.8283, -98.5795),
@@ -8,9 +15,9 @@ function initMapPage() {
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
 
-  var locationArray = []; //first is destination, second is start
-  var transitType = google.maps.TravelMode.WALKING;
-  var travelTime;
+  //var locationArray = []; //first is destination, second is start
+  //var transitType = google.maps.TravelMode.WALKING;
+  //var travelTime;
 
   // //FIREBASE Declarations
   // var user = firebase.auth().currentUser;
@@ -73,8 +80,8 @@ function initMapPage() {
     document.getElementById("distanceMatrixDestinationLatitude").value = lat;
     document.getElementById("distanceMatrixDestinationLongitude").value = lng;
     var latLong = new google.maps.LatLng(lat, lng);
-    locationArray[0] = latLong;
-    placeMarkers(locationArray);
+    routeOptions.locationArray[0] = latLong;
+    placeMarkers(routeOptions.locationArray);
     routeStartedHeader(false);
     console.log("destination latitude:" + lat);
     console.log("destination longitude:" + lng);
@@ -125,8 +132,8 @@ function initMapPage() {
     document.getElementById("waitForLocation").style.display = "none";
     directionsDisplay.setMap(null);
     var latLong = new google.maps.LatLng(latitude, longitude);
-    locationArray[1] = latLong;
-    placeMarkers(locationArray);
+    routeOptions.locationArray[1] = latLong;
+    placeMarkers(routeOptions.locationArray);
     document.getElementById("distanceMatrixStartLatitude").value = latitude;
     document.getElementById("distanceMatrixStartLongitude").value = longitude;
     console.log("Starting latitude:" + latitude);
@@ -157,57 +164,57 @@ function initMapPage() {
     });
   }
 
-  function computeDistanceTime() {
-    directionsDisplay.setMap(mapWithPosition);
-    calcRoute();
-    var startLat = document.getElementById("distanceMatrixStartLatitude").value;
-    var startLng = document.getElementById("distanceMatrixStartLongitude").value;
-    var destinationLat = document.getElementById("distanceMatrixDestinationLatitude").value;
-    var destinationLng = document.getElementById("distanceMatrixDestinationLongitude").value;
-    var originValues = startLat + "," + startLng;
-    var destinationValues = destinationLat + "," + destinationLng;
-    /*if (startLat || startLng || destinationLat || destinationLng === null) {
-      alert("Please enter values for all required fields.");
-    }*/
-    distanceService.getDistanceMatrix({
-      origins: [originValues],
-      destinations: [destinationValues],
-      travelMode: transitType,
-      unitSystem: google.maps.UnitSystem.IMPERIAL,
-      avoidHighways: false,
-      avoidTolls: false
-    }, matrixCallback);
-  }
 
-  function calcRoute() {
-    clearMarkers(markerArray);
-    var request = {
-      origin: locationArray[1],
-      destination: locationArray[0],
-      travelMode: transitType
-    };
-    directionsService.route(request, function (response, status) {
-      if (status == 'OK') {
-        directionsDisplay.setDirections(response);
-      }
-    });
-  }
+function computeDistanceTime() {
+  directionsDisplay.setMap(mapWithPosition);
+  calcRoute();
+  var startLat = document.getElementById("distanceMatrixStartLatitude").value;
+  var startLng = document.getElementById("distanceMatrixStartLongitude").value;
+  var destinationLat = document.getElementById("distanceMatrixDestinationLatitude").value;
+  var destinationLng = document.getElementById("distanceMatrixDestinationLongitude").value;
+  var originValues = startLat + "," + startLng;
+  var destinationValues = destinationLat + "," + destinationLng;
+  /*if (startLat || startLng || destinationLat || destinationLng === null) {
+    alert("Please enter values for all required fields.");
+  }*/
+  distanceService.getDistanceMatrix({
+    origins: [originValues],
+    destinations: [destinationValues],
+    travelMode: routeOptions.transitType,
+    unitSystem: google.maps.UnitSystem.IMPERIAL,
+    avoidHighways: false,
+    avoidTolls: false
+  }, matrixCallback);
+}
 
-  function matrixCallback(response, status) {
-    if (status !== "OK") {
-      alert("Error was: " + status);
-    } else {
-      var origins = response.orignAddress;
-      var destinations = response.destinationAddresses;
-      const distanceObj = response.rows[0]['elements'][0]['distance'];
-      const durationObj = response.rows[0]['elements'][0]['duration'];
-      // log test objects to console
-      console.log('reponse = ', response);
-      console.log(distanceObj.text);
-      console.log(durationObj.text);
-      travelTime = durationObj.text;
-      document.getElementById("timeDisplay").innerHTML = travelTime + '<br>' + distanceObj.text;
+function calcRoute(){
+  clearMarkers(markerArray);
+  var request = {
+    origin: routeOptions.locationArray[1],
+    destination: routeOptions.locationArray[0],
+    travelMode: routeOptions.transitType
+  };
+  directionsService.route(request, function(response, status) {
+    if (status == 'OK') {
+      directionsDisplay.setDirections(response);
     }
+  });
+}
+
+function matrixCallback(response, status) {
+  if (status !== "OK") {
+    alert("Error was: " + status);
+  } else {
+    var origins = response.orignAddress;
+    var destinations = response.destinationAddresses;
+    const distanceObj = response.rows[0]['elements'][0]['distance'];
+    const durationObj = response.rows[0]['elements'][0]['duration'];
+    // log test objects to console
+    console.log('reponse = ', response);
+    console.log(distanceObj.text);
+    console.log(durationObj.text);
+    routeOptions.travelTime = durationObj.text;//Original Travel time then travel time remaining on WatchPosition
+    document.getElementById("timeDisplay").innerHTML = routeOptions.travelTime + '<br>' + distanceObj.text;
   }
 
   function watchPosition() {
@@ -219,7 +226,7 @@ function initMapPage() {
 
     var curMarker = new google.maps.Marker({
       map: mapWithPosition,
-      position: locationArray[1],
+      position: routeOptions.locationArray[1],
       icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
     });
     markerArray[1].setMap(null);
@@ -234,13 +241,15 @@ function initMapPage() {
       console.log("watchedLongitude is: " + watchedLongitude);
       var curLatLng = new google.maps.LatLng(watchedLatitude, watchedLongitude); //move marker with user
       curMarker.setPosition(curLatLng);
-      if (checkArrival(locationArray[0], curLatLng, watchID)) {
+
+      if(checkArrival(routeOptions.locationArray[0],curLatLng,watchID)){
+
         alert('You have arrived');
       }
-      distanceService.getDistanceMatrix({
+      distanceService.getDistanceMatrix({//update travel time remaining 
         origins: [curLatLng],
-        destinations: [locationArray[0]],
-        travelMode: transitType,
+        destinations: [routeOptions.locationArray[0]],
+        travelMode: routeOptions.transitType,
         unitSystem: google.maps.UnitSystem.IMPERIAL,
         avoidHighways: false,
         avoidTolls: false
@@ -250,29 +259,31 @@ function initMapPage() {
     }), options);
   }
 
-  function setTravelMode() {
-    placeMarkers(locationArray)
-    switch (this.value) {
+
+  function setTravelMode(){
+    placeMarkers(routeOptions.locationArray)
+    switch(this.value){
       case "WALKING":
-        transitType = google.maps.TravelMode.WALKING;
+        routeOptions.transitType = google.maps.TravelMode.WALKING;
         break;
       case "DRIVING":
-        transitType = google.maps.TravelMode.DRIVING;
+        routeOptions.transitType = google.maps.TravelMode.DRIVING;
         break;
       case "TRANSIT":
-        transitType = google.maps.TravelMode.TRANSIT;
+        routeOptions.transitType = google.maps.TravelMode.TRANSIT;
         break;
       default:
-        transitType = google.maps.TravelMode.WALKING;
+        routeOptions.transitType = google.maps.TravelMode.WALKING;
     }
     computeDistanceTime();
-    if (locationArray[0] != null) {
+    if (routeOptions.locationArray[0] != null){
       calcRoute();
     }
   }
 
   function startRoute() {
     routeStartedHeader(true);
+    //currentDate();
     watchPosition();
   }
 
@@ -290,7 +301,15 @@ function initMapPage() {
     }
   }
 
-  function findContact() {
+
+  /*function currentDate(){
+    var d = new Date();
+    var milliseconds = d.getTime();
+    alert(milliseconds);
+    return milliseconds;
+  }*/
+  
+  function findContact(){
     var searchInput = document.getElementById(CONTACTSINPUTFIELD).value;
     var options = new ContactFindOptions();
     options.filter = searchInput;
