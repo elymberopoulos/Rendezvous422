@@ -24,16 +24,28 @@ function fireBaseInit() {
         // logoutBtn.style.visibility = "visible";
         console.log(user.displayName);
         var userName = user.displayName;
-        dbRoot.once("value", function (snapshot) {
-          if (!snapshot.hasChild(userName)) {
-            db.ref("users/" + userName + "/").push({
-              location: {
-                "lat": 0,
-                "lng": 0
+        var userEndpoint = "users/" + userName + "/";
+        dbRoot.once("value", function(snapshot){
+          if(!snapshot.hasChild(userName)){
+            db.ref(userEndpoint).set({
+              location:{
+                "lat" : 0,
+                "lng" : 0
               }
-            });
+            })
           }
         })
+        //OLD VERSION (had auto generated key)
+        // dbRoot.once("value", function (snapshot) {
+        //   if (!snapshot.hasChild(userName)) {
+        //     db.ref("users/" + userName + "/").push({
+        //       location: {
+        //         "lat": 0,
+        //         "lng": 0
+        //       }
+        //     });
+        //   }
+        // })
       }
     });
 
