@@ -13,27 +13,27 @@ function initMapPage() {
   var travelTime;
 
   // //FIREBASE Declarations
-  var user = firebase.auth().currentUser;
-  var userName;
-  if(user !== null){
-    userName = user.displayName;
-  }
-  else{
-    userName = null;
-  }
-  const db = firebase.database();
-  console.log(userName);
-  dbUserRootEndpoint.set(username)
-    .then(() => {
-      // log data set success to console
-      console.log('data set...');
-    })
-    .catch((e) => {
-      // catcg error from Firebase - error logged to console
-      console.log('error returned', e);
-    });
-    const dbUserRootEndpoint = db.ref("users");
-    const userLocationEndpoint = db.ref("users/" + username + "/location"); //USE UPDATE// PASS OBJECT WITH NEW LAT AND LNG
+  // var user = firebase.auth().currentUser;
+  // var userName;
+  // if(user !== null){
+  //   userName = user.displayName;
+  // }
+  // else{
+  //   userName = null;
+  // }
+  // const db = firebase.database();
+  // console.log(userName);
+  // dbUserRootEndpoint.set(username)
+  //   .then(() => {
+  //     // log data set success to console
+  //     console.log('data set...');
+  //   })
+  //   .catch((e) => {
+  //     // catcg error from Firebase - error logged to console
+  //     console.log('error returned', e);
+  //   });
+  //   const dbUserRootEndpoint = db.ref("users");
+  //   const userLocationEndpoint = db.ref("users/" + username + "/location"); //USE UPDATE// PASS OBJECT WITH NEW LAT AND LNG
     
 
   //API declarations 
