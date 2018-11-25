@@ -15,9 +15,9 @@ function initMapPage() {
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
 
-  //var locationArray = []; //first is destination, second is start
-  //var transitType = google.maps.TravelMode.WALKING;
-  //var travelTime;
+  // var locationArray = []; //first is destination, second is start
+  // var transitType = google.maps.TravelMode.WALKING;
+  // var travelTime;
 
   //FIREBASE Declarations
   //  var user = firebase.auth().currentUser;
@@ -244,6 +244,7 @@ function initMapPage() {
       routeOptions.travelTime = durationObj.text; //Original Travel time then travel time remaining on WatchPosition
       document.getElementById("timeDisplay").innerHTML = routeOptions.travelTime + '<br>' + distanceObj.text;
     }
+  }
 
     function watchPosition() {
       var options = {
@@ -367,4 +368,3 @@ function initMapPage() {
       }
     }
   }
-}
