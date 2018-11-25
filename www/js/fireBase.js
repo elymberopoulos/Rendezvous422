@@ -8,8 +8,7 @@ function fireBaseInit() {
 
   if (networkState !== Connection.NONE) {
     var config = {
-      //INSERT CONFIG VALUES HERE FROM FIREBASE
-      //REMOVED FOR SECURITY
+
     };
     firebase.initializeApp(config);
 
@@ -18,10 +17,10 @@ function fireBaseInit() {
     var googleLogin = document.getElementById('loginBtn').addEventListener('click', googleSignIn);
     const googleProvider = new firebase.auth.GoogleAuthProvider();
     const facebookProvider = new firebase.auth.FacebookAuthProvider();
-    
-    loginBtn.style.visibility="visible";
-    registerBtn.style.visibility="visible";
-    mapPageBtn.style.visibility="visible";
+
+    loginBtn.style.visibility = "visible";
+    registerBtn.style.visibility = "visible";
+    mapPageBtn.style.visibility = "visible";
 
     function googleSignIn() {
       if (networkState !== Connection.NONE) {
@@ -32,41 +31,43 @@ function fireBaseInit() {
       } else {
         alert("No network connection detected!");
       }
-      // then(function(result) {
-      //
-      //   var token = result.credential.accessToken;
-      //
-      //   var user = result.user;
-      //
-      // }).catch(function(error) {
-      //   var errorCode = error.code;
-      //   var errorMessage = error.message;
-      //   var email = error.email;
-      //   var credential = error.credential;
-      //
-      // });
+      then(function(result) {
+
+        var token = result.credential.accessToken;
+
+        var user = result.user;
+        console.log(user);
+
+      }).catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        var email = error.email;
+        var credential = error.credential;
+
+      });
     }
-  
+
     function facebookSignIn() {
       console.log("Facebook login clicked.");
       console.log(facebookProvider);
       firebase.auth().languageCode = firebase.auth().useDeviceLanguage();
       firebase.auth().signInWithPopup(facebookProvider).then(function (result) {
-  
+
         var token = result.credential.accessToken;
-  
+
         var user = result.user;
-  
+
       }).catch(function (error) {
         var errorCode = error.code;
         var errorMessage = error.message;
         var email = error.email;
         var credential = error.credential;
-  
+
       });
     }
-  }
-  else{
+
+
+  } else {
     alert("This application requires a network connection. No network connection detected.");
   }
 
