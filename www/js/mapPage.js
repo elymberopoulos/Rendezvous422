@@ -111,6 +111,10 @@ function initMapPage() {
     routeOptions.locationArray[0] = latLong;
     placeMarkers(routeOptions.locationArray);
     //routeStartedHeader(false);
+    document.getElementById("startTravelButton").style.display = "block";
+    document.getElementById("map_canvas").style.height = "78vmax";
+
+
     console.log("destination latitude:" + lat);
     console.log("destination longitude:" + lng);
     mapWithPosition.fitBounds(bounds); //fit markers
@@ -313,6 +317,9 @@ function initMapPage() {
 
     function startRoute() {
       //routeStartedHeader(true);
+      document.getElementById("startTravelButton").style.display = "none";
+      document.getElementById("map_canvas").style.height = "88vmax";
+
       //currentDate();
       watchPosition();
     }
