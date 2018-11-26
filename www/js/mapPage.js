@@ -110,7 +110,11 @@ function initMapPage() {
     var latLong = new google.maps.LatLng(lat, lng);
     routeOptions.locationArray[0] = latLong;
     placeMarkers(routeOptions.locationArray);
-    routeStartedHeader(false);
+    //routeStartedHeader(false);
+    document.getElementById("startTravelButton").style.display = "block";
+    document.getElementById("map_canvas").style.height = "78vmax";
+
+
     console.log("destination latitude:" + lat);
     console.log("destination longitude:" + lng);
     mapWithPosition.fitBounds(bounds); //fit markers
@@ -122,7 +126,7 @@ function initMapPage() {
       case true:
         document.getElementById("startTravelButton").style.display = "none";
         document.getElementById("map_canvas").style.height = "90vmax";
-        document.getElementById("radioButtons").style.display = "none";
+        //document.getElementById("radioButtons").style.display = "none";
         document.getElementById("timeDisplay").style.left = "20%";
         document.getElementById("timeDisplay").style.bottom = "40%";
         document.getElementById("timeDisplay").style.width = "64%";
@@ -131,7 +135,7 @@ function initMapPage() {
         break;
       case false:
         document.getElementById("startTravelButton").style.display = "block";
-        document.getElementById("radioButtons").style.display = "block";
+        //document.getElementById("radioButtons").style.display = "block";
         document.getElementById("map_canvas").style.height = "78vmax";
         document.getElementById("timeDisplay").style.left = "56%";
         break;
@@ -214,6 +218,7 @@ function initMapPage() {
       avoidTolls: false
     }, matrixCallback);
   }
+
 
   function calcRoute() {
     clearMarkers(markerArray);
@@ -311,7 +316,10 @@ function initMapPage() {
     }
 
     function startRoute() {
-      routeStartedHeader(true);
+      //routeStartedHeader(true);
+      document.getElementById("startTravelButton").style.display = "none";
+      document.getElementById("map_canvas").style.height = "88vmax";
+
       //currentDate();
       watchPosition();
     }
@@ -367,4 +375,5 @@ function initMapPage() {
         menu.style.width = "0%";
       }
     }
-  }
+}
+

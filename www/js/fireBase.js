@@ -9,7 +9,7 @@ function fireBaseInit() {
 
   if (networkState !== Connection.NONE) {
     var config = {
-
+      
     };
     firebase.initializeApp(config);
 
