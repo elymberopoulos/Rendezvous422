@@ -11,10 +11,12 @@
     "license": "Apache-2.0",
     "dependencies": {
         "cordova-android": "^7.0.0",
+        "cordova-plugin-background-mode": "0.7.2",
         "cordova-plugin-browsertab": "0.2.0",
         "cordova-plugin-buildinfo": "2.0.2",
         "cordova-plugin-compat": "1.2.0",
         "cordova-plugin-customurlscheme": "4.3.0",
+        "cordova-plugin-device": "2.0.2",
         "cordova-plugin-geolocation": "^4.0.1",
         "cordova-plugin-googlemaps": "^2.4.6",
         "cordova-plugin-inappbrowser": "3.0.0",
@@ -41,7 +43,8 @@
                 "ANDROID_PATHPREFIX": "/"
             },
             "cordova-plugin-network-information": {},
-            "cordova-plugin-browsertab": {}
+            "cordova-plugin-browsertab": {},
+            "cordova-plugin-background-mode": {}
         },
         "platforms": [
             "android"

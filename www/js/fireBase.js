@@ -33,6 +33,7 @@ function fireBaseInit() {
             })
           }
         })
+        document.location.href = "mapPage.html";
         //OLD VERSION (had auto generated key)
         // dbRoot.once("value", function (snapshot) {
         //   if (!snapshot.hasChild(userName)) {
@@ -44,20 +45,23 @@ function fireBaseInit() {
         //     });
         //   }
         // })
+      }else{
+        //document.location.href = "index.html";
+        loginBtn.style.visibility = "visible";
       }
     });
 
 
 
     var googleLogin = document.getElementById('loginBtn').addEventListener('click', googleSignIn);
-    var signOut = logoutBtn.addEventListener("click", logout);
+    //var signOut = logoutBtn.addEventListener("click", logout);
     const googleProvider = new firebase.auth.GoogleAuthProvider();
     const facebookProvider = new firebase.auth.FacebookAuthProvider();
 
-    loginBtn.style.visibility = "visible";
+    // loginBtn.style.visibility = "visible";
     //registerBtn.style.visibility = "visible";
-    mapPageBtn.style.visibility = "visible";
-    logoutBtn.style.visibility = "visible";
+    // mapPageBtn.style.visibility = "visible";
+    // logoutBtn.style.visibility = "visible";
 
     // function checkEndPointNotNull(){
     //   dbRoot.once("value", function(snapshot){
@@ -75,6 +79,7 @@ function fireBaseInit() {
     function googleSignIn() {
       console.log("Google login clicked.");
       console.log(googleProvider);
+      loginBtn.style.visibility = "hidden";
       //firebase.auth().languageCode = firebase.auth().useDeviceLanguage();
       return firebase.auth().signInWithRedirect(googleProvider);
     }
@@ -115,12 +120,12 @@ function fireBaseInit() {
   } else {
     alert("This application requires a network connection. No network connection detected.");
   }
-  function logout(user) {
+ /*function logout(user) {
     console.log("logout clicked.");
     if(user){
       return firebase.auth().signOut();
     }else{
       console.log("no user");
     }
-  };
+  };*/
 }
