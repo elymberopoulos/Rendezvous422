@@ -1,6 +1,6 @@
 function initMapPage() {
   getLocation();
-
+  
   var routeOptions = {
     transitType: google.maps.TravelMode.WALKING,
     gracePeriod: null,
@@ -18,8 +18,48 @@ function initMapPage() {
   // var locationArray = []; //first is destination, second is start
   // var transitType = google.maps.TravelMode.WALKING;
   // var travelTime;
-
   //FIREBASE Declarations
+  
+  firebase.initializeApp(firebaseConfig);
+
+  const db = firebase.database();
+  var curUser = firebase.auth().currentUser;
+  console.log(db);
+  const dbRoot = db.ref("users");
+
+  firebase.auth().onAuthStateChanged((user) => {
+    curUser = user;
+  });
+  function updateUsersDbLocation(lat, lng){
+    if (curUser) {
+      console.log(curUser.displayName);
+      var userName = curUser.displayName;
+      var userEndpoint = "users/" + userName + "/";
+      dbRoot.once("value", function(snapshot){
+        if(snapshot.hasChild(userName)){
+          db.ref(userEndpoint).set({
+            location:{
+              "lat" : lat,
+              "lng" : lng
+            }
+          })
+        }
+      })
+    }else{
+      console.log("noUser");
+    }
+  }
+  function logout() {
+    console.log("logout clicked.");
+    if(curUser){
+      if(confirm("You are about to log out. Are you sure?")) {
+        document.location.href = "index.html";
+        return firebase.auth().signOut();
+      }      
+    }else{
+      console.log("no user");
+    }
+  };
   //  var user = firebase.auth().currentUser;
   //  console.log(user);
   // var userName;
@@ -72,6 +112,7 @@ function initMapPage() {
 
 
   //API declarations 
+  cordova.plugins.backgroundMode.enable();
   var input = document.getElementById('placeSearch');
   var autocomplete = new google.maps.places.Autocomplete(input);
   var bounds = new google.maps.LatLngBounds(); //allows zooming of map to fit markers 
@@ -83,6 +124,7 @@ function initMapPage() {
   directionsDisplay.setMap(mapWithPosition);
 
   //EVENT LISTENERS 
+  document.addEventListener("backbutton", onBackKeyDown, false);
   var hamburgerButton = document.getElementById("fafabars").addEventListener("click", hamburgerMenu);
   var closeHamburgerButton = document.getElementById("closeFaFaBars").addEventListener("click", hamburgerMenu);
   var menu = document.getElementById("mapPageHamburgerScreen");
@@ -97,6 +139,8 @@ function initMapPage() {
   //locateSelfDOM.addEventListener("click", getLocation);
   var startTravelBtn = document.getElementById("startTravelButton")
   startTravelBtn.addEventListener("click", startRoute);
+  document.getElementById("logoutBtn").addEventListener("click",logout);
+  //cordova.plugins.backgroundMode.on("enable",moveBack);
 
 
   google.maps.event.addListener(autocomplete, 'place_changed', function () {
@@ -153,7 +197,7 @@ function initMapPage() {
     }, function (error) {
       console.log("error message: " + error.message + "\n" + "error code: " + error.code);
       alert("Could not find location, Turn on location and try again");
-      document.location.href = 'index.html';
+      navigator.app.exitApp();
     }, {
       enableHighAccuracy: true,
       timeout: 8000
@@ -275,9 +319,9 @@ function initMapPage() {
         console.log("watchedLongitude is: " + watchedLongitude);
         var curLatLng = new google.maps.LatLng(watchedLatitude, watchedLongitude); //move marker with user
         curMarker.setPosition(curLatLng);
+        updateUsersDbLocation(watchedLatitude,watchedLongitude);
 
         if (checkArrival(routeOptions.locationArray[0], curLatLng, watchID)) {
-
           alert('You have arrived');
         }
         distanceService.getDistanceMatrix({ //update travel time remaining 
@@ -319,9 +363,15 @@ function initMapPage() {
       //routeStartedHeader(true);
       document.getElementById("startTravelButton").style.display = "none";
       document.getElementById("map_canvas").style.height = "88vmax";
-
       //currentDate();
       watchPosition();
+    }
+
+    function onBackKeyDown() {
+      moveBack();
+    }
+    function moveBack(){
+      cordova.plugins.backgroundMode.moveToBackground();
     }
 
     function checkArrival(destinationLatLng, watchedLatLng, watcher) { //check arrival and clear watch position if true 
