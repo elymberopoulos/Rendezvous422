@@ -5,7 +5,10 @@ function initMapPage() {
     transitType: google.maps.TravelMode.WALKING,
     gracePeriod: null,
     travelTime: null,
-    locationArray: []
+    travelSeconds: null,
+    locationArray: [],
+    contactNumber: null,
+    contactName: null
   }
 
   var div = document.getElementById("map_canvas");
@@ -282,6 +285,7 @@ function initMapPage() {
     if (status !== "OK") {
       alert("Error was: " + status);
     } else {
+      console.log(response);
       var origins = response.orignAddress;
       var destinations = response.destinationAddresses;
       const distanceObj = response.rows[0]['elements'][0]['distance'];
@@ -291,6 +295,7 @@ function initMapPage() {
       console.log(distanceObj.text);
       console.log(durationObj.text);
       routeOptions.travelTime = durationObj.text; //Original Travel time then travel time remaining on WatchPosition
+      routeOptions.travelSeconds = durationObj.value;
       document.getElementById("timeDisplay").innerHTML = routeOptions.travelTime + '<br>' + distanceObj.text;
     }
   }
@@ -353,14 +358,15 @@ function initMapPage() {
         default:
           routeOptions.transitType = google.maps.TravelMode.WALKING;
       }
-      computeDistanceTime();
       if (routeOptions.locationArray[0] != null) {
+        computeDistanceTime();
         calcRoute();
       }
     }
 
     function startRoute() {
       //routeStartedHeader(true);
+      console.log(routeOptions.travelTime);
       document.getElementById("startTravelButton").style.display = "none";
       document.getElementById("map_canvas").style.height = "88vmax";
       //currentDate();
@@ -395,11 +401,27 @@ function initMapPage() {
       alert(milliseconds);
       return milliseconds;
     }*/
-
-    function findContact() {
-      var searchInput = document.getElementById(CONTACTSINPUTFIELD).value;
+    document.getElementById("contactBtn").addEventListener("click",pickContact);
+    
+    function pickContact(){
+      navigator.contacts.pickContact(function(contact){
+        document.getElementById("contactBtn").style.backgroundColor = "silver";
+        
+        console.log(contact);
+        console.log(contact.phoneNumbers[0]['value']);
+        console.log(contact.displayName + contact.phoneNumbers[0]['value']);
+        routeOptions.contactName = contact.displayName;
+        routeOptions.contactNumber = contact.phoneNumbers[0]['value'];
+        document.getElementById("selectedContact").innerHTML = routeOptions.contactName;
+      },function(err){
+        console.log('Error: ' + err);
+      });
+    }
+      
+    /*function findContact() {
+      //var searchInput = document.getElementById(CONTACTSINPUTFIELD).value;
       var options = new ContactFindOptions();
-      options.filter = searchInput;
+      options.filter = "Morgan";
       options.multiple = true;
       options.desiredFields = [navigator.contacts.fieldType.name, navigator.contacts.fieldType.phoneNumbers];
       options.hasPhoneNumber = true;
@@ -416,12 +438,16 @@ function initMapPage() {
 
     function contactError(error) {
       console.log("Cannot find contacts because of error: " + error);
-    }
+    }*/
 
     function hamburgerMenu() {
+      document.getElementById("waitForLocation").innerHTML = "";
+      document.getElementById("waitForLocation").addEventListener("click",hamburgerMenu);
       if (menu.style.width == "0%") {
         menu.style.width = "55%";
+        document.getElementById("waitForLocation").style.display = "block";
       } else if (menu.style.width !== "0%") {
+        document.getElementById("waitForLocation").style.display = "none";
         menu.style.width = "0%";
       }
     }
