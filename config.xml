@@ -40,6 +40,7 @@
     <plugin name="cordova-plugin-buildinfo" spec="2.0.2" />
     <plugin name="cordova-universal-links-plugin" spec="git+https://github.com/nordnet/cordova-universal-links-plugin.git" />
     <plugin name="cordova-plugin-browsertab" spec="0.2.0" />
+<<<<<<< HEAD
     <plugin name="cordova-plugin-customurlscheme" spec="4.3.0">
         <variable name="\URL_SCHEME" value="com.firebase.cordova" />
         <variable name="URL_SCHEME" value="com.firebase.cordova" />
@@ -48,4 +49,10 @@
         <variable name="ANDROID_PATHPREFIX" value="/" />
     </plugin>
     <engine name="android" spec="^6.3.0" />
+=======
+    <plugin name="cordova-plugin-background-mode" spec="0.7.2" />
+    <plugin name="cordova-plugin-contacts" spec="3.0.1" />
+    <plugin name="cordova-plugin-sms" spec="1.0.5" />
+    <engine name="android" spec="^7.0.0" />
+>>>>>>> d5bc1646eeee347ae5d88b0be8322d48ae8dc96f
 </widget>

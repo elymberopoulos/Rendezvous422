@@ -1,11 +1,14 @@
 function initMapPage() {
   getLocation();
-
+  
   var routeOptions = {
     transitType: google.maps.TravelMode.WALKING,
     gracePeriod: null,
     travelTime: null,
-    locationArray: []
+    travelSeconds: null,
+    locationArray: [],
+    contactNumber: null,
+    contactName: null
   }
 
   var div = document.getElementById("map_canvas");
@@ -18,8 +21,48 @@ function initMapPage() {
   // var locationArray = []; //first is destination, second is start
   // var transitType = google.maps.TravelMode.WALKING;
   // var travelTime;
-
   //FIREBASE Declarations
+  
+  firebase.initializeApp(firebaseConfig);
+
+  const db = firebase.database();
+  var curUser = firebase.auth().currentUser;
+  console.log(db);
+  const dbRoot = db.ref("users");
+
+  firebase.auth().onAuthStateChanged((user) => {
+    curUser = user;
+  });
+  function updateUsersDbLocation(lat, lng){
+    if (curUser) {
+      console.log(curUser.displayName);
+      var userName = curUser.displayName;
+      var userEndpoint = "users/" + userName + "/";
+      dbRoot.once("value", function(snapshot){
+        if(snapshot.hasChild(userName)){
+          db.ref(userEndpoint).set({
+            location:{
+              "lat" : lat,
+              "lng" : lng
+            }
+          })
+        }
+      })
+    }else{
+      console.log("noUser");
+    }
+  }
+  function logout() {
+    console.log("logout clicked.");
+    if(curUser){
+      if(confirm("You are about to log out. Are you sure?")) {
+        document.location.href = "index.html";
+        return firebase.auth().signOut();
+      }      
+    }else{
+      console.log("no user");
+    }
+  };
   //  var user = firebase.auth().currentUser;
   //  console.log(user);
   // var userName;
@@ -72,6 +115,7 @@ function initMapPage() {
 
 
   //API declarations 
+  cordova.plugins.backgroundMode.enable();
   var input = document.getElementById('placeSearch');
   var autocomplete = new google.maps.places.Autocomplete(input);
   var bounds = new google.maps.LatLngBounds(); //allows zooming of map to fit markers 
@@ -83,6 +127,7 @@ function initMapPage() {
   directionsDisplay.setMap(mapWithPosition);
 
   //EVENT LISTENERS 
+  document.addEventListener("backbutton", onBackKeyDown, false);
   var hamburgerButton = document.getElementById("fafabars").addEventListener("click", hamburgerMenu);
   var closeHamburgerButton = document.getElementById("closeFaFaBars").addEventListener("click", hamburgerMenu);
   var menu = document.getElementById("mapPageHamburgerScreen");
@@ -97,6 +142,8 @@ function initMapPage() {
   //locateSelfDOM.addEventListener("click", getLocation);
   var startTravelBtn = document.getElementById("startTravelButton")
   startTravelBtn.addEventListener("click", startRoute);
+  document.getElementById("logoutBtn").addEventListener("click",logout);
+  //cordova.plugins.backgroundMode.on("enable",moveBack);
 
 
   google.maps.event.addListener(autocomplete, 'place_changed', function () {
@@ -153,7 +200,7 @@ function initMapPage() {
     }, function (error) {
       console.log("error message: " + error.message + "\n" + "error code: " + error.code);
       alert("Could not find location, Turn on location and try again");
-      document.location.href = 'index.html';
+      navigator.app.exitApp();
     }, {
       enableHighAccuracy: true,
       timeout: 8000
@@ -238,6 +285,7 @@ function initMapPage() {
     if (status !== "OK") {
       alert("Error was: " + status);
     } else {
+      console.log(response);
       var origins = response.orignAddress;
       var destinations = response.destinationAddresses;
       const distanceObj = response.rows[0]['elements'][0]['distance'];
@@ -247,6 +295,7 @@ function initMapPage() {
       console.log(distanceObj.text);
       console.log(durationObj.text);
       routeOptions.travelTime = durationObj.text; //Original Travel time then travel time remaining on WatchPosition
+      routeOptions.travelSeconds = durationObj.value;
       document.getElementById("timeDisplay").innerHTML = routeOptions.travelTime + '<br>' + distanceObj.text;
     }
   }
@@ -275,9 +324,9 @@ function initMapPage() {
         console.log("watchedLongitude is: " + watchedLongitude);
         var curLatLng = new google.maps.LatLng(watchedLatitude, watchedLongitude); //move marker with user
         curMarker.setPosition(curLatLng);
+        updateUsersDbLocation(watchedLatitude,watchedLongitude);
 
         if (checkArrival(routeOptions.locationArray[0], curLatLng, watchID)) {
-
           alert('You have arrived');
         }
         distanceService.getDistanceMatrix({ //update travel time remaining 
@@ -309,19 +358,26 @@ function initMapPage() {
         default:
           routeOptions.transitType = google.maps.TravelMode.WALKING;
       }
-      computeDistanceTime();
       if (routeOptions.locationArray[0] != null) {
+        computeDistanceTime();
         calcRoute();
       }
     }
 
     function startRoute() {
       //routeStartedHeader(true);
+      console.log(routeOptions.travelTime);
       document.getElementById("startTravelButton").style.display = "none";
       document.getElementById("map_canvas").style.height = "88vmax";
-
       //currentDate();
       watchPosition();
+    }
+
+    function onBackKeyDown() {
+      moveBack();
+    }
+    function moveBack(){
+      cordova.plugins.backgroundMode.moveToBackground();
     }
 
     function checkArrival(destinationLatLng, watchedLatLng, watcher) { //check arrival and clear watch position if true 
@@ -345,11 +401,27 @@ function initMapPage() {
       alert(milliseconds);
       return milliseconds;
     }*/
-
-    function findContact() {
-      var searchInput = document.getElementById(CONTACTSINPUTFIELD).value;
+    document.getElementById("contactBtn").addEventListener("click",pickContact);
+    
+    function pickContact(){
+      navigator.contacts.pickContact(function(contact){
+        document.getElementById("contactBtn").style.backgroundColor = "silver";
+        
+        console.log(contact);
+        console.log(contact.phoneNumbers[0]['value']);
+        console.log(contact.displayName + contact.phoneNumbers[0]['value']);
+        routeOptions.contactName = contact.displayName;
+        routeOptions.contactNumber = contact.phoneNumbers[0]['value'];
+        document.getElementById("selectedContact").innerHTML = routeOptions.contactName;
+      },function(err){
+        console.log('Error: ' + err);
+      });
+    }
+      
+    /*function findContact() {
+      //var searchInput = document.getElementById(CONTACTSINPUTFIELD).value;
       var options = new ContactFindOptions();
-      options.filter = searchInput;
+      options.filter = "Morgan";
       options.multiple = true;
       options.desiredFields = [navigator.contacts.fieldType.name, navigator.contacts.fieldType.phoneNumbers];
       options.hasPhoneNumber = true;
@@ -366,12 +438,16 @@ function initMapPage() {
 
     function contactError(error) {
       console.log("Cannot find contacts because of error: " + error);
-    }
+    }*/
 
     function hamburgerMenu() {
+      document.getElementById("waitForLocation").innerHTML = "";
+      document.getElementById("waitForLocation").addEventListener("click",hamburgerMenu);
       if (menu.style.width == "0%") {
         menu.style.width = "55%";
+        document.getElementById("waitForLocation").style.display = "block";
       } else if (menu.style.width !== "0%") {
+        document.getElementById("waitForLocation").style.display = "none";
         menu.style.width = "0%";
       }
     }
