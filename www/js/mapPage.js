@@ -1,6 +1,6 @@
 function initMapPage() {
   getLocation();
-
+  
   var routeOptions = {
     transitType: google.maps.TravelMode.WALKING,
     gracePeriod: null,
@@ -14,12 +14,41 @@ function initMapPage() {
     zoom: 3,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
-
   // var locationArray = []; //first is destination, second is start
   // var transitType = google.maps.TravelMode.WALKING;
   // var travelTime;
-
   //FIREBASE Declarations
+  
+  firebase.initializeApp(firebaseConfig);
+
+  const db = firebase.database();
+  var curUser = firebase.auth().currentUser;
+  console.log(db);
+  const dbRoot = db.ref("users");
+
+  firebase.auth().onAuthStateChanged((user) => {
+    curUser = user;
+    
+  });
+  function updateUsersDbLocation(lat, lng){
+    if (curUser) {
+      console.log(curUser.displayName);
+      var userName = curUser.displayName;
+      var userEndpoint = "users/" + userName + "/";
+      dbRoot.once("value", function(snapshot){
+        if(snapshot.hasChild(userName)){
+          db.ref(userEndpoint).set({
+            location:{
+              "lat" : lat,
+              "lng" : lng
+            }
+          })
+        }
+      })
+    }else{
+      console.log("noUser");
+    }
+  }
   //  var user = firebase.auth().currentUser;
   //  console.log(user);
   // var userName;
@@ -275,9 +304,9 @@ function initMapPage() {
         console.log("watchedLongitude is: " + watchedLongitude);
         var curLatLng = new google.maps.LatLng(watchedLatitude, watchedLongitude); //move marker with user
         curMarker.setPosition(curLatLng);
+        updateUsersDbLocation(watchedLatitude,watchedLongitude);
 
         if (checkArrival(routeOptions.locationArray[0], curLatLng, watchID)) {
-
           alert('You have arrived');
         }
         distanceService.getDistanceMatrix({ //update travel time remaining 

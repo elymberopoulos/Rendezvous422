@@ -1,17 +1,15 @@
 // https://rendezvous.page.link
+const firebaseConfig = {
+  
+};
 function fireBaseInit() {
-
   var networkState = navigator.connection.type;
   var loginBtn = document.getElementById("loginBtn");
   var registerBtn = document.getElementById("registerBtn");
   var mapPageBtn = document.getElementById("mapPageBtn");
   var logoutBtn = document.getElementById("logoutBtn");
-
   if (networkState !== Connection.NONE) {
-    var config = {
-      
-    };
-    firebase.initializeApp(config);
+    firebase.initializeApp(firebaseConfig);
 
     const db = firebase.database();
     var user = firebase.auth().currentUser;
@@ -72,10 +70,7 @@ function fireBaseInit() {
     //   })
     // }
 
-    function logout() {
-      console.log("logout clicked.");
-      return firebase.auth().signOut();
-    };
+    
 
     function googleSignIn() {
       console.log("Google login clicked.");
@@ -120,4 +115,12 @@ function fireBaseInit() {
   } else {
     alert("This application requires a network connection. No network connection detected.");
   }
+  function logout(user) {
+    console.log("logout clicked.");
+    if(user){
+      return firebase.auth().signOut();
+    }else{
+      console.log("no user");
+    }
+  };
 }
