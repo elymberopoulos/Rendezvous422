@@ -135,9 +135,21 @@ function initMapPage() {
   var walk = document.getElementById("walk");
   var drive = document.getElementById("drive");
   var transit = document.getElementById("transit");
+<<<<<<< HEAD
   walk.addEventListener("click", setTravelMode);
   drive.addEventListener("click", setTravelMode);
   transit.addEventListener("click", setTravelMode);
+=======
+  var hamburger = document.getElementById("fafabars");
+  //var hamclose = document.getElementById("")
+  //var contact = document.getElementById("contact-btn");
+  walk.addEventListener("click",setTravelMode);
+  drive.addEventListener("click",setTravelMode);
+  transit.addEventListener("click",setTravelMode);
+  //contact.addEventListener("click", onContactDown);
+  hamburger.addEventListener("click", openNav);
+  hamburger.addEventListener("touchstart", openNav, false);
+>>>>>>> 8d3b2494cd0bab4093332dc70aa5574f1322b127
   //var locateSelfDOM = document.getElementById("locateSelfButton");
   //locateSelfDOM.addEventListener("click", getLocation);
   var startTravelBtn = document.getElementById("startTravelButton")
@@ -317,6 +329,7 @@ function initMapPage() {
       mapWithPosition.setZoom(17);
       mapWithPosition.setCenter(curMarker.getPosition());
 
+<<<<<<< HEAD
       var watchID = navigator.geolocation.watchPosition(function (position) {
         var watchedLatitude = position.coords.latitude;
         var watchedLongitude = position.coords.longitude;
@@ -451,5 +464,35 @@ function initMapPage() {
         menu.style.width = "0%";
       }
     }
+=======
+  function findContact(){
+    var searchInput = document.getElementById(CONTACTSINPUTFIELD).value;
+    var options = new ContactFindOptions();
+    options.filter = searchInput;
+    options.multiple = true;
+    options.desiredFields = [navigator.contacts.fieldType.name, navigator.contacts.fieldType.phoneNumbers];
+    options.hasPhoneNumber = true;
+    var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name,
+      navigator.contacts.fieldType.phoneNumbers];
+    navigator.contacts.find(fields, contactSuccess, contactError, options);
+    navigator.contacts.find
+  }
+  function contactSuccess(contacts){
+    alert('Found ' + contacts.length + ' contacts.');
+  }
+  function contactError(error){
+    console.log("Cannot find contacts because of error: " + error);
+  }
+  function onContactDown(){
+    //findContact();
+  }
+  function openNav(){
+    document.getElementById("mapmenu").style.visibility = "visible";
+  }
+  function closeNav(){
+    document.getElementById("mapmenu").style.visibility = "hidden";
+  }
+
+>>>>>>> 8d3b2494cd0bab4093332dc70aa5574f1322b127
 }
 

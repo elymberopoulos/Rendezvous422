@@ -29,6 +29,7 @@
         <variable name="PLAY_SERVICES_VERSION" value="15.0.1" />
         <variable name="ANDROID_SUPPORT_V4_VERSION" value="27.+" />
     </plugin>
+<<<<<<< HEAD
     <plugin name="cordova-plugin-inappbrowser" spec="3.0.0" />
     <universal-links>
         <host name="rendezvous.page.link" scheme="https" />
@@ -55,4 +56,7 @@
     <plugin name="cordova-plugin-sms" spec="1.0.5" />
     <engine name="android" spec="^7.0.0" />
 >>>>>>> d5bc1646eeee347ae5d88b0be8322d48ae8dc96f
+=======
+    <engine name="android" spec="^7.1.1" />
+>>>>>>> 8d3b2494cd0bab4093332dc70aa5574f1322b127
 </widget>

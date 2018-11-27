@@ -11,6 +11,7 @@
     "license": "Apache-2.0",
     "dependencies": {
 <<<<<<< HEAD
+<<<<<<< HEAD
         "add": "^2.0.6",
         "cordova-android": "^6.3.0",
 =======
@@ -23,6 +24,9 @@
         "cordova-plugin-contacts": "3.0.1",
         "cordova-plugin-customurlscheme": "4.3.0",
         "cordova-plugin-device": "2.0.2",
+=======
+        "cordova-android": "^7.1.1",
+>>>>>>> 8d3b2494cd0bab4093332dc70aa5574f1322b127
         "cordova-plugin-geolocation": "^4.0.1",
         "cordova-plugin-googlemaps": "^2.4.6",
         "cordova-plugin-inappbrowser": "3.0.0",
