@@ -49,5 +49,6 @@
     <plugin name="cordova-plugin-background-mode" spec="0.7.2" />
     <plugin name="cordova-plugin-contacts" spec="3.0.1" />
     <plugin name="cordova-plugin-sms" spec="1.0.5" />
+    <plugin name="cordova-sms-plugin" spec="0.1.13" />
     <engine name="android" spec="^7.0.0" />
 </widget>
