@@ -1,6 +1,6 @@
 // https://rendezvous.page.link
 const firebaseConfig = {
-  
+
 };
 function fireBaseInit() {
   var networkState = navigator.connection.type;
