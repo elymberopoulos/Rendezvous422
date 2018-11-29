@@ -1,11 +1,6 @@
 // https://rendezvous.page.link
 const firebaseConfig = {
-  apiKey: "AIzaSyCVoSGosWTkRgL69T4Au3aGrCBgViBuI1M",
-  authDomain: "rendezvous-219221.firebaseapp.com",
-  databaseURL: "https://rendezvous-219221.firebaseio.com",
-  projectId: "rendezvous-219221",
-  storageBucket: "rendezvous-219221.appspot.com",
-  messagingSenderId: "343762694139"
+  
 };
 function fireBaseInit() {
   var networkState = navigator.connection.type;
