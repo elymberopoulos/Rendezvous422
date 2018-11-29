@@ -37,21 +37,32 @@ function initMapPage() {
     if (curUser) {
       console.log(curUser.displayName);
       var userName = curUser.displayName;
-      var userEndpoint = "users/" + userName + "/";
-      dbRoot.once("value", function(snapshot){
-        if(snapshot.hasChild(userName)){
-          db.ref(userEndpoint).set({
-            location:{
-              "lat" : lat,
-              "lng" : lng
-            }
-          })
-        }
+      var userName = curUser.displayName;
+      var contactRef = dbRoot.child(userName).child("location");
+      contactRef.update({
+         "lat": lat,
+         "lng": lng
       })
     }else{
       console.log("noUser");
     }
   }
+  
+  function updateDbContact(contactNum,contactName){
+    if (curUser && contactNum !==null) {
+      console.log(curUser.displayName);
+      var userName = curUser.displayName;
+      var contactRef = dbRoot.child(userName).child("emergencyContact");
+      contactRef.update({
+         "phone": contactNum,
+         "name": contactName
+      })
+      
+    }else{
+      console.log("noUser or contactNum");
+    }
+  }
+
   function logout() {
     console.log("logout clicked.");
     if(curUser){
@@ -168,7 +179,7 @@ function initMapPage() {
     computeDistanceTime();
   });
 
-  function routeStartedHeader(option) { //set map header to display options or not
+  /*function routeStartedHeader(option) { //set map header to display options or not
     switch (option) {
       case true:
         document.getElementById("startTravelButton").style.display = "none";
@@ -187,7 +198,7 @@ function initMapPage() {
         document.getElementById("timeDisplay").style.left = "56%";
         break;
     }
-  }
+  }*/
 
   function getLocation() {
     var latitude;
@@ -210,6 +221,7 @@ function initMapPage() {
   function onLocateSuccess(latitude, longitude) {
     document.getElementById("waitForLocation").style.display = "none";
     directionsDisplay.setMap(null);
+    updateUsersDbLocation(latitude,longitude);
     var latLong = new google.maps.LatLng(latitude, longitude);
     routeOptions.locationArray[1] = latLong;
     placeMarkers(routeOptions.locationArray);
@@ -217,7 +229,6 @@ function initMapPage() {
     document.getElementById("distanceMatrixStartLongitude").value = longitude;
     console.log("Starting latitude:" + latitude);
     console.log("Starting longitude:" + longitude);
-    //watchPosition();
   }
 
   var markerArray = [] //start and end markers 
@@ -300,47 +311,48 @@ function initMapPage() {
     }
   }
 
-    function watchPosition() {
-      var options = {
-        enableHighAccuracy: true,
-        maximumAge: 3500,
-        timeout: 5000
-      };
+  function watchPosition() {
+    var options = {
+      enableHighAccuracy: true,
+      maximumAge: 3500,
+      timeout: 5000
+    };
 
-      var curMarker = new google.maps.Marker({
-        map: mapWithPosition,
-        position: routeOptions.locationArray[1],
-        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
-      });
-      markerArray[1].setMap(null);
-      curMarker.setMap(mapWithPosition);
-      mapWithPosition.setZoom(17);
-      mapWithPosition.setCenter(curMarker.getPosition());
+    var curMarker = new google.maps.Marker({
+      map: mapWithPosition,
+      position: routeOptions.locationArray[1],
+      icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+    });
+    markerArray[1].setMap(null);
+    curMarker.setMap(mapWithPosition);
+    mapWithPosition.setZoom(17);
+    mapWithPosition.setCenter(curMarker.getPosition());
 
-      var watchID = navigator.geolocation.watchPosition(function (position) {
-        var watchedLatitude = position.coords.latitude;
-        var watchedLongitude = position.coords.longitude;
-        console.log("watchedLatitude is: " + watchedLatitude);
-        console.log("watchedLongitude is: " + watchedLongitude);
-        var curLatLng = new google.maps.LatLng(watchedLatitude, watchedLongitude); //move marker with user
-        curMarker.setPosition(curLatLng);
-        updateUsersDbLocation(watchedLatitude,watchedLongitude);
+    var watchID = navigator.geolocation.watchPosition(function (position) {
+      var watchedLatitude = position.coords.latitude;
+      var watchedLongitude = position.coords.longitude;
+      console.log("watchedLatitude is: " + watchedLatitude);
+      console.log("watchedLongitude is: " + watchedLongitude);
+      var curLatLng = new google.maps.LatLng(watchedLatitude, watchedLongitude); //move marker with user
+      curMarker.setPosition(curLatLng);
+      updateUsersDbLocation(watchedLatitude,watchedLongitude);
 
-        if (checkArrival(routeOptions.locationArray[0], curLatLng, watchID)) {
-          alert('You have arrived');
-        }
-        distanceService.getDistanceMatrix({ //update travel time remaining 
-          origins: [curLatLng],
-          destinations: [routeOptions.locationArray[0]],
-          travelMode: routeOptions.transitType,
-          unitSystem: google.maps.UnitSystem.IMPERIAL,
-          avoidHighways: false,
-          avoidTolls: false
-        }, matrixCallback);
-      }, (function (error) {
-        console.log("Watch Position error message: " + error.message + "\n" + "error code: " + error.code);
-      }), options);
-    }
+      if (checkArrival(routeOptions.locationArray[0], curLatLng, watchID)) {
+        var message = "I have arrived safely";
+        sendSMS(routeOptions.contactNumber,message,true);
+      }
+      distanceService.getDistanceMatrix({ //update travel time remaining 
+        origins: [curLatLng],
+        destinations: [routeOptions.locationArray[0]],
+        travelMode: routeOptions.transitType,
+        unitSystem: google.maps.UnitSystem.IMPERIAL,
+        avoidHighways: false,
+        avoidTolls: false
+      }, matrixCallback);
+    }, (function (error) {
+      console.log("Watch Position error message: " + error.message + "\n" + "error code: " + error.code);
+    }), options);
+  }
 
 
     function setTravelMode() {
@@ -365,12 +377,44 @@ function initMapPage() {
     }
 
     function startRoute() {
-      //routeStartedHeader(true);
-      console.log(routeOptions.travelTime);
-      document.getElementById("startTravelButton").style.display = "none";
-      document.getElementById("map_canvas").style.height = "88vmax";
-      //currentDate();
-      watchPosition();
+      if(routeOptions.contactName === null || routeOptions.contactNumber === null){
+        alert("Cannot start route without valid contact");
+      }else{
+        //routeStartedHeader(true);
+        console.log(routeOptions.travelTime);
+        document.getElementById("startTravelButton").style.display = "none";
+        document.getElementById("map_canvas").style.height = "88vmax";
+        //currentDate();
+        watchPosition();
+      }
+    }
+
+    function sendSMS(num,mess,arrived){
+      var app = {
+        sendSms: function(number,message) {
+            var number = num;
+            var message = mess;
+            console.log("number=" + number + ", message= " + message);
+    
+            var options = {
+                replaceLineBreaks: false, 
+                android: {
+                    intent: ''  
+                    //intent: '' // send SMS without open any other app
+                }
+            };
+            var success = function (arrival) { 
+              if(arrival){
+                alert('Message sent that you arrived safely');
+              }else{
+                alert('Message sent that you did not arrive')
+              }
+            };
+            var error = function (e) { alert('Message Failed:' + e); };
+            sms.send(number, message, options, success(arrived), error);
+        }
+      };
+      app.sendSms();  
     }
 
     function onBackKeyDown() {
@@ -413,6 +457,7 @@ function initMapPage() {
         routeOptions.contactName = contact.displayName;
         routeOptions.contactNumber = contact.phoneNumbers[0]['value'];
         document.getElementById("selectedContact").innerHTML = routeOptions.contactName;
+        updateDbContact(routeOptions.contactNumber, routeOptions.contactName);
       },function(err){
         console.log('Error: ' + err);
       });

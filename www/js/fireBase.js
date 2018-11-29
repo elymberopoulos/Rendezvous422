@@ -1,6 +1,15 @@
 // https://rendezvous.page.link
 const firebaseConfig = {
+<<<<<<< HEAD
 
+=======
+  apiKey: "AIzaSyCVoSGosWTkRgL69T4Au3aGrCBgViBuI1M",
+  authDomain: "rendezvous-219221.firebaseapp.com",
+  databaseURL: "https://rendezvous-219221.firebaseio.com",
+  projectId: "rendezvous-219221",
+  storageBucket: "rendezvous-219221.appspot.com",
+  messagingSenderId: "343762694139"
+>>>>>>> 8644a50d4939d868593d6c62a5c09ff4ec48046a
 };
 function fireBaseInit() {
   var networkState = navigator.connection.type;
@@ -26,6 +35,10 @@ function fireBaseInit() {
         dbRoot.once("value", function(snapshot){
           if(!snapshot.hasChild(userName)){
             db.ref(userEndpoint).set({
+              emergencyContact:{
+                "phone": "",
+                "name": ""
+              },
               location:{
                 "lat" : 0,
                 "lng" : 0
