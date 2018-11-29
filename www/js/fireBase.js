@@ -38,17 +38,6 @@ function fireBaseInit() {
           }
         })
         document.location.href = "mapPage.html";
-        //OLD VERSION (had auto generated key)
-        // dbRoot.once("value", function (snapshot) {
-        //   if (!snapshot.hasChild(userName)) {
-        //     db.ref("users/" + userName + "/").push({
-        //       location: {
-        //         "lat": 0,
-        //         "lng": 0
-        //       }
-        //     });
-        //   }
-        // })
       }else{
         //document.location.href = "index.html";
         loginBtn.style.visibility = "visible";

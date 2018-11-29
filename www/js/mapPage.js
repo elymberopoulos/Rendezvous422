@@ -1,6 +1,5 @@
 function initMapPage() {
   getLocation();
-  
   var routeOptions = {
     transitType: google.maps.TravelMode.WALKING,
     gracePeriod: null,
@@ -31,7 +30,9 @@ function initMapPage() {
   const dbRoot = db.ref("users");
 
   firebase.auth().onAuthStateChanged((user) => {
-    curUser = user;
+    if(user){
+      curUser = user; 
+    }   
   });
   function updateUsersDbLocation(lat, lng){
     if (curUser) {
@@ -67,61 +68,14 @@ function initMapPage() {
     console.log("logout clicked.");
     if(curUser){
       if(confirm("You are about to log out. Are you sure?")) {
+        firebase.auth().signOut();
         document.location.href = "index.html";
-        return firebase.auth().signOut();
       }      
     }else{
       console.log("no user");
     }
   };
-  //  var user = firebase.auth().currentUser;
-  //  console.log(user);
-  // var userName;
-  // if (user !== null) {
-  //   userName = user.displayName;
-  // } else {
-  //   userName = null;
-  // }
-  // const db = firebase.database();
-  // console.log(userName);
-  // dbUserRootEndpoint.set(username)
-  //   .then(() => {
-  //     // log data set success to console
-  //     console.log('data set...');
-  //   })
-  //   .catch((e) => {
-  //     // catcg error from Firebase - error logged to console
-  //     console.log('error returned', e);
-  //   });
-  // const dbUserRootEndpoint = db.ref("users");
-  // const userLatEndpoint = db.ref("users/" + username + "/location/lat");
-  // const userLngEndpoint = db.ref("users/" + username + "/location/lng"); //USE UPDATE// PASS OBJECT WITH NEW LAT AND LNG
-  // function registerUserInDB() {
-  //   if (user != null) {
-  //     dbUserRootEndpoint.push({
-  //       userName: {
-  //         "lat": 0,
-  //         "lng": 0
-  //       }
-  //     }).then(() => {
-  //       console.log("New user registered.");
-  //     }).catch((error) => {
-  //       console.log("error = ", error);
-  //     })
-  //   }
-  // }
-  // //Call this function inside watch position
-  // function updateUserDB(lat, lng) {
-  //   db.ref().update({
-  //     userLatEndpoint: lat,
-  //     userLngEndpoint: lng
-  //   }).then(() => {
-  //     console.log("User location updated.");
-  //   }).catch((error) => {
-  //     console.log("error = ", error);
-  //   })
-  // }
-
+  
   // Firebase declaration end
 
 
@@ -133,7 +87,6 @@ function initMapPage() {
   var directionsService = new google.maps.DirectionsService();
   var directionsDisplay = new google.maps.DirectionsRenderer();
   var distanceService = new google.maps.DistanceMatrixService();
-
   var mapWithPosition = new google.maps.Map(div, mapOptions);
   directionsDisplay.setMap(mapWithPosition);
 
@@ -178,27 +131,6 @@ function initMapPage() {
     mapWithPosition.fitBounds(bounds); //fit markers
     computeDistanceTime();
   });
-
-  /*function routeStartedHeader(option) { //set map header to display options or not
-    switch (option) {
-      case true:
-        document.getElementById("startTravelButton").style.display = "none";
-        document.getElementById("map_canvas").style.height = "90vmax";
-        //document.getElementById("radioButtons").style.display = "none";
-        document.getElementById("timeDisplay").style.left = "20%";
-        document.getElementById("timeDisplay").style.bottom = "40%";
-        document.getElementById("timeDisplay").style.width = "64%";
-        document.getElementById("timeDisplay").style.fontSize = "20px";
-        document.getElementById("placeSearch").style.display = "none";
-        break;
-      case false:
-        document.getElementById("startTravelButton").style.display = "block";
-        //document.getElementById("radioButtons").style.display = "block";
-        document.getElementById("map_canvas").style.height = "78vmax";
-        document.getElementById("timeDisplay").style.left = "56%";
-        break;
-    }
-  }*/
 
   function getLocation() {
     var latitude;
