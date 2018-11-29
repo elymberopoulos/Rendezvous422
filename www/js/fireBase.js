@@ -1,11 +1,6 @@
 // https://rendezvous.page.link
 const firebaseConfig = {
-  apiKey: "AIzaSyCVoSGosWTkRgL69T4Au3aGrCBgViBuI1M",
-  authDomain: "rendezvous-219221.firebaseapp.com",
-  databaseURL: "https://rendezvous-219221.firebaseio.com",
-  projectId: "rendezvous-219221",
-  storageBucket: "rendezvous-219221.appspot.com",
-  messagingSenderId: "343762694139"
+  
 };
 function fireBaseInit() {
   var networkState = navigator.connection.type;
@@ -43,17 +38,6 @@ function fireBaseInit() {
           }
         })
         document.location.href = "mapPage.html";
-        //OLD VERSION (had auto generated key)
-        // dbRoot.once("value", function (snapshot) {
-        //   if (!snapshot.hasChild(userName)) {
-        //     db.ref("users/" + userName + "/").push({
-        //       location: {
-        //         "lat": 0,
-        //         "lng": 0
-        //       }
-        //     });
-        //   }
-        // })
       }else{
         //document.location.href = "index.html";
         loginBtn.style.visibility = "visible";
