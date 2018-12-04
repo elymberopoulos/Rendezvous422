@@ -279,11 +279,13 @@ function initMapPage() {
         var message = "I have arrived safely";
         sendSMS(routeOptions.contactNumber,message,true);
         curMarker.setMap(null);
+        directionsDisplay.setMap(null);
       } else if((new Date().getTime() / 1000) >= routeOptions.arrivalTime){
         var message = "I did not make it on time";
         sendSMS(routeOptions.contactNumber,message,false);
         navigator.geolocation.clearWatch(watchID);
         curMarker.setMap(null);
+        directionsDisplay.setMap(null);
       }
       distanceService.getDistanceMatrix({ //update travel time remaining 
         origins: [curLatLng],
@@ -357,14 +359,14 @@ function initMapPage() {
               }else{
                 alert('Message sent that you did not arrive')
               }
-              if(confirm("Would you like to start another route?")){
-                startNewRoute();
-              }else{
-                navigator.app.exitApp();
-              }
             };
             var error = function (e) { alert('Message Failed:' + e); };
             sms.send(number, message, options, success(arrived), error);
+            if(confirm("Would you like to start another route?")){
+              startNewRoute();
+            }else{
+              navigator.app.exitApp();
+            }
             
 
             
@@ -373,7 +375,7 @@ function initMapPage() {
       app.sendSms();  
     }
 
-    function onBackKeyDown() {
+    function onBackKeyDown() {//control back key functionality
       cordova.plugins.backgroundMode.moveToBackground(); 
     }
     
