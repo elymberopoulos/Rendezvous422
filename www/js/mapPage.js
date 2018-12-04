@@ -111,6 +111,11 @@ function initMapPage() {
   startTravelBtn.addEventListener("click", startRoute);
   document.getElementById("logoutBtn").addEventListener("click",logout);
   //cordova.plugins.backgroundMode.on("enable",moveBack);
+  var gracePeriodSlide = document.getElementById("gracePeriodSlide");
+  gracePeriodSlide.addEventListener("change",function(){
+    document.getElementById('gracePeriodLabel').innerHTML = "Grace Period: <br>" + gracePeriodSlide.value + "Min";
+    routeOptions.gracePeriod = gracePeriodSlide.value * 60; //convert to seconds
+  });
 
 
   google.maps.event.addListener(autocomplete, 'place_changed', function () {
@@ -330,7 +335,7 @@ function initMapPage() {
         console.log(routeOptions.travelTime);
         document.getElementById("startTravelButton").style.display = "none";
         document.getElementById("map_canvas").style.height = "88vmax";
-        routeOptions.arrivalTime = (new Date().getTime() / 1000) + routeOptions.durationValue;
+        routeOptions.arrivalTime = (new Date().getTime() / 1000) + routeOptions.durationValue + routeOptions.gracePeriod;
         let estimatedArrivalTime = new Date();//convert arrival time back to date type
         estimatedArrivalTime.setTime(routeOptions.arrivalTime * 1000);
         var timeOptions = {
@@ -338,7 +343,7 @@ function initMapPage() {
           minute: 'numeric',
           hour12: true
         };
-        routeOptions.arrivalTimeText = estimatedArrivalTime.toLocaleString('en-US', timeOptions);
+        routeOptions.arrivalTimeText = "Arrive By: " + estimatedArrivalTime.toLocaleString('en-US', timeOptions);
         
         document.getElementById("placeSearch").disabled = true;
         watchPosition();
