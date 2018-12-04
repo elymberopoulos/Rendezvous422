@@ -310,13 +310,27 @@ a{
 .timeDisplay{
     position: absolute;
     bottom: 20%;
-    left: 33%;
+    left: 17%;
     height: 32%;
-    width: 32%;
+    width: 64%;
     text-align: center;
     font-size: 16px;
     font-weight: bold;
 }
+
+.gracePeriod{
+    margin: 0 auto;
+    width: 90%;
+    text-align: center;
+    margin-top: 10%;
+}
+
+.gracePeriod label{
+    color: white;
+    font-size: 16px;
+}
+
+
 /* Landscape layout (with min-width) */
 @media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
     .app {
