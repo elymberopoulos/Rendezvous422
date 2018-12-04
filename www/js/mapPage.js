@@ -9,7 +9,8 @@ function initMapPage() {
     contactNumber: null,
     contactName: null,
     durationValue: 0, //seconds
-    arrivalTime: null
+    arrivalTime: null, //seconds
+    arrivalTimeText: "" //text
   }
 
   var div = document.getElementById("map_canvas");
@@ -114,7 +115,7 @@ function initMapPage() {
 
   google.maps.event.addListener(autocomplete, 'place_changed', function () {
     directionsDisplay.setMap(null); //clear route line
-    document.getElementById("timeDisplay").style.display = "block";
+    document.getElementById("timeDisplay").style.visibility = "visible";
     routeOptions.durationValue = 0;
     var place = autocomplete.getPlace();
     var lat = place.geometry.location.lat();
@@ -245,7 +246,7 @@ function initMapPage() {
       }      
       routeOptions.travelTime = durationObj.text; //Original Travel time then travel time remaining on WatchPosition
       routeOptions.travelSeconds = durationObj.value;
-      document.getElementById("timeDisplay").innerHTML = routeOptions.travelTime + '<br>' + distanceObj.text;
+      document.getElementById("timeDisplay").innerHTML = routeOptions.travelTime + '<br>' + distanceObj.text + '<br>' + routeOptions.arrivalTimeText;
     }
   }
 
@@ -326,12 +327,19 @@ function initMapPage() {
       if(routeOptions.contactName === null || routeOptions.contactNumber === null){
         alert("Cannot start route without valid contact");
       }else{
-        //routeStartedHeader(true);
         console.log(routeOptions.travelTime);
         document.getElementById("startTravelButton").style.display = "none";
         document.getElementById("map_canvas").style.height = "88vmax";
-        //currentDate();
         routeOptions.arrivalTime = (new Date().getTime() / 1000) + routeOptions.durationValue;
+        let estimatedArrivalTime = new Date();//convert arrival time back to date type
+        estimatedArrivalTime.setTime(routeOptions.arrivalTime * 1000);
+        var timeOptions = {
+          hour: 'numeric',
+          minute: 'numeric',
+          hour12: true
+        };
+        routeOptions.arrivalTimeText = estimatedArrivalTime.toLocaleString('en-US', timeOptions);
+        
         document.getElementById("placeSearch").disabled = true;
         watchPosition();
       }
@@ -431,7 +439,7 @@ function initMapPage() {
       directionsDisplay = new google.maps.DirectionsRenderer();
       routeOptions.durationValue = 0;
       document.getElementById("placeSearch").value = "";
-      document.getElementById("timeDisplay").style.display = "none";
+      document.getElementById("timeDisplay").style.visibility = "none";
       document.getElementById("placeSearch").disabled = false;
       //routeOptions.locationArray = [];
       clearMarkers(markerArray);
