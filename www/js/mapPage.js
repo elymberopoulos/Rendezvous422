@@ -205,9 +205,7 @@ function initMapPage() {
     var destinationLng = document.getElementById("distanceMatrixDestinationLongitude").value;
     var originValues = startLat + "," + startLng;
     var destinationValues = destinationLat + "," + destinationLng;
-    /*if (startLat || startLng || destinationLat || destinationLng === null) {
-      alert("Please enter values for all required fields.");
-    }*/
+
     distanceService.getDistanceMatrix({
       origins: [originValues],
       destinations: [destinationValues],

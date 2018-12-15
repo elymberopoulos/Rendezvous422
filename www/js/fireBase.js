@@ -1,4 +1,3 @@
-// https://rendezvous.page.link
 const firebaseConfig = {
   
 };
@@ -44,30 +43,10 @@ function fireBaseInit() {
       }
     });
 
-
-
     var googleLogin = document.getElementById('loginBtn').addEventListener('click', googleSignIn);
     //var signOut = logoutBtn.addEventListener("click", logout);
     const googleProvider = new firebase.auth.GoogleAuthProvider();
     const facebookProvider = new firebase.auth.FacebookAuthProvider();
-
-    // loginBtn.style.visibility = "visible";
-    //registerBtn.style.visibility = "visible";
-    // mapPageBtn.style.visibility = "visible";
-    // logoutBtn.style.visibility = "visible";
-
-    // function checkEndPointNotNull(){
-    //   dbRoot.once("value", function(snapshot){
-    //     if(!snapshot.hasChild(userName)){
-    //       return true;
-    //     }
-    //     else{
-    //       return false;
-    //     }
-    //   })
-    // }
-
-    
 
     function googleSignIn() {
       console.log("Google login clicked.");
@@ -76,21 +55,6 @@ function fireBaseInit() {
       //firebase.auth().languageCode = firebase.auth().useDeviceLanguage();
       return firebase.auth().signInWithRedirect(googleProvider);
     }
-    //   then(function(result) {
-
-    //     var token = result.credential.accessToken;
-
-    //     var user = result.user;
-    //     console.log(user);
-
-    //   }).catch(function(error) {
-    //     var errorCode = error.code;
-    //     var errorMessage = error.message;
-    //     var email = error.email;
-    //     var credential = error.credential;
-
-    //   });
-    // }
 
     function facebookSignIn() {
       console.log("Facebook login clicked.");
@@ -113,12 +77,5 @@ function fireBaseInit() {
   } else {
     alert("This application requires a network connection. No network connection detected.");
   }
- /*function logout(user) {
-    console.log("logout clicked.");
-    if(user){
-      return firebase.auth().signOut();
-    }else{
-      console.log("no user");
-    }
-  };*/
+
 }
